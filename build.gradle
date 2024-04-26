@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '1.5-SNAPSHOT'
+	id 'fabric-loom' version '1.6-SNAPSHOT'
 	id 'maven-publish'
 	id 'me.shedaniel.unified-publishing' version '0.1.+'
 }
@@ -112,11 +112,6 @@ unifiedPublishing {
 		curseforge {
 			token = System.getenv('CURSEFORGE_TOKEN')
 			id = '977886'
-		}
-
-		modrinth {
-			token = System.getenv('MODRINTH_TOKEN')
-			id = 'dTjOn6NG'
 		}
 	}
 }

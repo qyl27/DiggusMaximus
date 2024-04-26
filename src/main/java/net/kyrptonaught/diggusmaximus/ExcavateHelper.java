@@ -78,17 +78,22 @@ public class ExcavateHelper {
     }
 
     private static boolean checkTool(PlayerEntity player, Item tool) {
-        if (player.isCreative()) return true;
+        if (player.isCreative()) {
+            return true;
+        }
         ItemStack heldItem = player.getMainHandStack();
-        if (DiggusMaximusMod.getOptions().dontBreakTool && heldItem.getDamage() + 1 == tool.getMaxDamage())
+        if (DiggusMaximusMod.getOptions().dontBreakTool && heldItem.getDamage() + 1 == heldItem.getMaxDamage()) {
             return false;
-        if (heldItem.getItem() != tool)
-            if (DiggusMaximusMod.getOptions().stopOnToolBreak || DiggusMaximusMod.getOptions().requiresTool)
+        }
+        if (heldItem.getItem() != tool) {
+            if (DiggusMaximusMod.getOptions().stopOnToolBreak || DiggusMaximusMod.getOptions().requiresTool) {
                 return false;
-        return isTool(heldItem.getItem()) || !DiggusMaximusMod.getOptions().requiresTool;
+            }
+        }
+        return isTool(heldItem) || !DiggusMaximusMod.getOptions().requiresTool;
     }
 
-    private static boolean isTool(Item isTool) {
-        return isTool.isDamageable() || DiggusMaximusMod.getOptions().tools.contains(Registries.ITEM.getId(isTool).toString());
+    private static boolean isTool(ItemStack stack) {
+        return stack.isDamageable() || DiggusMaximusMod.getOptions().tools.contains(Registries.ITEM.getId(stack.getItem()).toString());
     }
 }
