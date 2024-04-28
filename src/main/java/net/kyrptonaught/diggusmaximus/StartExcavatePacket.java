@@ -51,17 +51,17 @@ public class StartExcavatePacket {
         public static ExcavatePayload from(PacketByteBuf buf) {
             var pos = buf.readBlockPos();
             var id = buf.readIdentifier();
-            var facingId = buf.readVarInt();
+            var facingId = buf.readInt();
             var facing = facingId == -1 ? null : Direction.byId(facingId);
-            var shape = buf.readVarInt();
+            var shape = buf.readInt();
             return new ExcavatePayload(pos, id, facing, shape);
         }
 
         public static void write(PacketByteBuf buf, ExcavatePayload payload) {
             buf.writeBlockPos(payload.pos);
             buf.writeIdentifier(payload.id);
-            buf.writeVarInt(payload.facing == null ? -1 : payload.facing.getId());
-            buf.writeVarInt(payload.shape);
+            buf.writeInt(payload.facing == null ? -1 : payload.facing.getId());
+            buf.writeInt(payload.shape);
         }
     }
 }
