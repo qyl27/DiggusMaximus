@@ -25,7 +25,7 @@ public class Excavate {
     private final Direction facing;
     private int shapeSelection = -1;
 
-    private static final int airHash = new Identifier("minecraft:air").hashCode();
+    private static final int airHash = Identifier.of("minecraft:air").hashCode();
 
     public Excavate(BlockPos pos, Identifier blockID, PlayerEntity player, Direction facing) {
         this.startPos = pos;

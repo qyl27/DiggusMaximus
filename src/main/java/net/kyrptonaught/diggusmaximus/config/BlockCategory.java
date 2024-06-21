@@ -23,7 +23,7 @@ public class BlockCategory implements AbstractConfigFile {
             List<Identifier> expanded = new ArrayList<>();
             for (String item : group.split(",")) {
                 if (item.startsWith("#"))
-                    expanded.addAll(TagHelper.getBlockIDsInTag(new Identifier(item.replaceAll("#", ""))));
+                    expanded.addAll(TagHelper.getBlockIDsInTag(Identifier.of(item.replaceAll("#", ""))));
                 else expanded.add(Identifier.tryParse(item));
             }
 

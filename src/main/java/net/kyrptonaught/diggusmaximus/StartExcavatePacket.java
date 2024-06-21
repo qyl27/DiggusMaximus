@@ -37,7 +37,7 @@ public class StartExcavatePacket {
     }
 
     public record ExcavatePayload(BlockPos pos, Identifier id, Direction facing, int shape) implements CustomPayload {
-        public static final Identifier IDENTIFIER = new Identifier(DiggusMaximusMod.MOD_ID, "start_excavate_packet");
+        public static final Identifier IDENTIFIER = Identifier.of(DiggusMaximusMod.MOD_ID, "start_excavate_packet");
 
         public static final Id<ExcavatePayload> PACKET_ID = new Id<>(IDENTIFIER);
 
