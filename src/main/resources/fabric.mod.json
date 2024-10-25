@@ -1,11 +1,12 @@
 {
   "schemaVersion": 1,
   "id": "diggusmaximus",
-  "version": "${version}",
-  "name": "Diggus Maximus",
+  "version": "${mod_version}",
+  "name": "Diggus Maximus Reborn",
   "description": "Mine ores more better!",
   "authors": [
-    "kyrptonaught"
+    "kyrptonaught",
+    "qyl27"
   ],
   "contact": {
     "homepage": "https://www.curseforge.com/minecraft/mc-mods/diggus-maximus-reborn",
@@ -31,9 +32,9 @@
     ]
   },
   "depends": {
-    "minecraft": ">=${minecraft_version}",
-    "fabricloader": ">=${loader_version}",
-    "fabric": "*",
-    "kyrptconfig": ">=${kyrptconfig_version}"
+    "minecraft": "${minecraft_version_range}",
+    "fabricloader": "${fabric_loader_version_range}",
+    "fabric": "${fabric_api_version_range}",
+    "cloth-config": "${cloth_config_version_range}"
   }
 }
