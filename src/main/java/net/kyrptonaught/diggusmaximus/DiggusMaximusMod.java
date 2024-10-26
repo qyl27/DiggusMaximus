@@ -2,20 +2,16 @@ package net.kyrptonaught.diggusmaximus;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.kyrptonaught.diggusmaximus.client.DiggusKeyBinding;
 import net.kyrptonaught.diggusmaximus.config.Blacklist;
 import net.kyrptonaught.diggusmaximus.config.BlockCategory;
 import net.kyrptonaught.diggusmaximus.config.ConfigOptions;
 import net.kyrptonaught.diggusmaximus.config.ExcavatingShapes;
 import net.kyrptonaught.kyrptconfig.config.ConfigManager;
-import net.kyrptonaught.kyrptconfig.config.CustomSerializer;
-import net.kyrptonaught.kyrptconfig.keybinding.CustomKeyBinding;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 public class DiggusMaximusMod implements ModInitializer {
     public static final String MOD_ID = "diggusmaximus";
     public static ConfigManager configManager = new ConfigManager.MultiConfigManager(MOD_ID);
-
 
     @Override
     public void onInitialize() {
@@ -48,7 +44,7 @@ public class DiggusMaximusMod implements ModInitializer {
         return (ExcavatingShapes) configManager.getConfig("excavatingshapes.json5");
     }
 
-    public static Identifier getIDFromConfigLookup(Identifier blockID) {
+    public static ResourceLocation getIDFromConfigLookup(ResourceLocation blockID) {
         return getGrouping().lookup.getOrDefault(blockID, blockID);
     }
 }

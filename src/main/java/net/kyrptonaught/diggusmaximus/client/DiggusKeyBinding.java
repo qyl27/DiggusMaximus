@@ -1,8 +1,8 @@
 package net.kyrptonaught.diggusmaximus.client;
 
+import com.mojang.blaze3d.platform.InputConstants;
 import net.kyrptonaught.diggusmaximus.DiggusMaximusMod;
 import net.kyrptonaught.kyrptconfig.keybinding.CustomKeyBinding;
-import net.minecraft.client.util.InputUtil;
 
 public class DiggusKeyBinding extends CustomKeyBinding {
     public boolean respectsInvert;
@@ -25,11 +25,15 @@ public class DiggusKeyBinding extends CustomKeyBinding {
 
     public boolean isKeybindPressed() {
         boolean pressed = super.isKeybindPressed();
-        if (parsedKey == null) // Invalid key
-            return false;
-        if (parsedKey == InputUtil.UNKNOWN_KEY)
+        if (parsedKey == null) {
+            return false;    // Invalid key
+        }
+        if (parsedKey == InputConstants.UNKNOWN) {
             return unknownIsActivated; // Always pressed for empty or explicitly "key.keyboard.unknown"
-        if (respectsInvert && DiggusMaximusMod.getOptions().invertActivation) return !pressed;
+        }
+        if (respectsInvert && DiggusMaximusMod.getOptions().invertActivation) {
+            return !pressed;
+        }
         return pressed;
     }
 }

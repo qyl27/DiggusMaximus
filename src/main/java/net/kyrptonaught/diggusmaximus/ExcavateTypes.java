@@ -1,39 +1,32 @@
 package net.kyrptonaught.diggusmaximus;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 
 public class ExcavateTypes {
-    public enum shape {
-        HORIZONTAL_LAYER, LAYER, HOLE, ONExTWO, ONExTWO_TUNNEL,
-        THREExTHREE, THREExTHREE_TUNNEL
+    public enum Shape {
+        HORIZONTAL_LAYER, LAYER, HOLE, ONE_TWO, ONE_TWO_TUNNEL,
+        THREE_THREE, THREE_THREE_TUNNEL
     }
 
-    public static List<BlockPos> getSpreadType(int shapeSelection, Direction facing, BlockPos startPos, BlockPos curPos) {
-        if (shapeSelection == -1)
+    public static List<BlockPos> getSpreadType(int shapeSelection, Direction facing,
+                                               BlockPos startPos, BlockPos curPos) {
+        if (shapeSelection == -1) {
             return DiggusMaximusMod.getOptions().mineDiag ? ExcavateTypes.standardDiag : ExcavateTypes.standard;
-
-        switch (shape.values()[shapeSelection]) {
-            case HOLE:
-                return ExcavateTypes.hole(facing);
-            case HORIZONTAL_LAYER:
-                return ExcavateTypes.horizontalLayer();
-            case LAYER:
-                return ExcavateTypes.layers(facing);
-            case ONExTWO:
-                return ExcavateTypes.onebytwo(startPos, curPos);
-            case ONExTWO_TUNNEL:
-                return ExcavateTypes.onebytwoTunnel(startPos, curPos, facing);
-            case THREExTHREE:
-                return ExcavateTypes.threebythree(startPos, curPos, facing);
-            case THREExTHREE_TUNNEL:
-                return ExcavateTypes.threebythreeTunnel(startPos, curPos, facing);
         }
-        return ExcavateTypes.standard;
+
+        return switch (Shape.values()[shapeSelection]) {
+            case HOLE -> ExcavateTypes.hole(facing);
+            case HORIZONTAL_LAYER -> ExcavateTypes.horizontalLayer();
+            case LAYER -> ExcavateTypes.layers(facing);
+            case ONE_TWO -> ExcavateTypes.oneByTwo(startPos, curPos);
+            case ONE_TWO_TUNNEL -> ExcavateTypes.oneByTwoTunnel(startPos, curPos, facing);
+            case THREE_THREE -> ExcavateTypes.threeByThree(startPos, curPos, facing);
+            case THREE_THREE_TUNNEL -> ExcavateTypes.threeByThreeTunnel(startPos, curPos, facing);
+        };
     }
 
     public static List<BlockPos> horizontalLayer() {
@@ -46,8 +39,9 @@ public class ExcavateTypes {
     }
 
     public static List<BlockPos> layers(Direction facing) {
-        if (facing.getAxis() == Direction.Axis.Y)
+        if (facing.getAxis() == Direction.Axis.Y) {
             return horizontalLayer();
+        }
 
         List<BlockPos> cube = new ArrayList<>();
         cube.add(new BlockPos(0, 1, 0));
@@ -64,11 +58,11 @@ public class ExcavateTypes {
 
     public static List<BlockPos> hole(Direction facing) {
         List<BlockPos> cube = new ArrayList<>();
-        cube.add(BlockPos.ORIGIN.offset(facing.getOpposite()));
+        cube.add(BlockPos.ZERO.relative(facing.getOpposite()));
         return cube;
     }
 
-    public static List<BlockPos> threebythree(BlockPos startPos, BlockPos curPos, Direction facing) {
+    public static List<BlockPos> threeByThree(BlockPos startPos, BlockPos curPos, Direction facing) {
         List<BlockPos> cube = new ArrayList<>();
         if (startPos.equals(curPos)) {
             if (facing.getAxis().isHorizontal()) {
@@ -103,21 +97,21 @@ public class ExcavateTypes {
         return cube;
     }
 
-    public static List<BlockPos> threebythreeTunnel(BlockPos startPos, BlockPos curPos, Direction facing) {
-        List<BlockPos> cube = threebythree(startPos, curPos, facing);
-        cube.add(BlockPos.ORIGIN.offset(facing.getOpposite()));
-        cube.addAll(cube.stream().map(blockPos -> blockPos.offset(facing.getOpposite())).collect(Collectors.toList()));
+    public static List<BlockPos> threeByThreeTunnel(BlockPos startPos, BlockPos curPos, Direction facing) {
+        List<BlockPos> cube = threeByThree(startPos, curPos, facing);
+        cube.add(BlockPos.ZERO.relative(facing.getOpposite()));
+        cube.addAll(cube.stream().map(blockPos -> blockPos.relative(facing.getOpposite())).toList());
         return cube;
     }
 
-    public static List<BlockPos> onebytwo(BlockPos startPos, BlockPos curPos) {
+    public static List<BlockPos> oneByTwo(BlockPos startPos, BlockPos curPos) {
         List<BlockPos> cube = new ArrayList<>();
         if (startPos.getY() == curPos.getY())
             cube.add(new BlockPos(0, -1, 0));
         return cube;
     }
 
-    public static List<BlockPos> onebytwoTunnel(BlockPos startPos, BlockPos curPos, Direction facing) {
+    public static List<BlockPos> oneByTwoTunnel(BlockPos startPos, BlockPos curPos, Direction facing) {
         List<BlockPos> cube = hole(facing);
         if (startPos.getY() == curPos.getY()) {
             cube.add(new BlockPos(0, -1, 0));
@@ -136,6 +130,8 @@ public class ExcavateTypes {
         standard.add(new BlockPos(0, 0, -1));
         standard.add(new BlockPos(-1, 0, 0));
 
-        standardDiag.addAll(BlockPos.stream(-1, -1, -1, 1, 1, 1).map(BlockPos::toImmutable).collect(Collectors.toList()));
+        standardDiag.addAll(BlockPos.betweenClosedStream(-1, -1, -1, 1, 1, 1)
+                .map(BlockPos::immutable)
+                .toList());
     }
 }

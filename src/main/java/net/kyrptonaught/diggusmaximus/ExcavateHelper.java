@@ -1,18 +1,18 @@
 package net.kyrptonaught.diggusmaximus;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.predicate.entity.EntityPredicates;
-import net.minecraft.registry.Registries;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.world.World;
-
 import java.util.List;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.EntitySelector;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.phys.AABB;
 
 public class ExcavateHelper {
     static int maxMined = Math.min(DiggusMaximusMod.getOptions().maxMinedBlocks, 2048);
@@ -23,18 +23,18 @@ public class ExcavateHelper {
         maxDistance = Math.min(DiggusMaximusMod.getOptions().maxMineDistance + 1, 128);
     }
 
-    static void pickupDrops(World world, BlockPos pos, PlayerEntity player) {
-        List<ItemEntity> drops = world.getEntitiesByClass(ItemEntity.class, new Box(pos), EntityPredicates.VALID_ENTITY);
+    static void pickupDrops(Level world, BlockPos pos, Player player) {
+        List<ItemEntity> drops = world.getEntitiesOfClass(ItemEntity.class, new AABB(pos), EntitySelector.ENTITY_STILL_ALIVE);
         drops.forEach(item -> {
-            ItemStack stack = item.getStack();
-            player.getInventory().insertStack(stack);
+            ItemStack stack = item.getItem();
+            player.getInventory().add(stack);
             if (stack.getCount() <= 0)
                 item.discard();
         });
 
     }
 
-    static boolean isTheSameBlock(Identifier startID, Identifier newID, World world, int shapeSelection) {
+    static boolean isTheSameBlock(ResourceLocation startID, ResourceLocation newID, Level world, int shapeSelection) {
         if (shapeSelection > -1 && DiggusMaximusMod.getExcavatingShapes().includeDifBlocks)
             return true;
 
@@ -61,28 +61,28 @@ public class ExcavateHelper {
         return (Math.abs(pos.getX()) + Math.abs(pos.getY()) + Math.abs(pos.getZ())) != 0;
     }
 
-    static Block getBlockAt(World world, BlockPos pos) {
-        return (world.getBlockState(pos).getBlock());
+    static Block getBlockAt(Level world, BlockPos pos) {
+        return world.getBlockState(pos).getBlock();
     }
 
-    static boolean canMine(PlayerEntity player, Item tool, World world, BlockPos startPos, BlockPos pos) {
+    static boolean canMine(Player player, Item tool, Level world, BlockPos startPos, BlockPos pos) {
         return isWithinDistance(startPos, pos) && checkTool(player, tool) && isBreakableBlock(getBlockAt(world, pos));
     }
 
     private static boolean isBreakableBlock(Block block) {
-        return block.getHardness() >= 0;
+        return block.defaultDestroyTime() >= 0;
     }
 
     private static boolean isWithinDistance(BlockPos startPos, BlockPos pos) {
-        return pos.isWithinDistance(startPos, maxDistance);
+        return pos.closerThan(startPos, maxDistance);
     }
 
-    private static boolean checkTool(PlayerEntity player, Item tool) {
+    private static boolean checkTool(Player player, Item tool) {
         if (player.isCreative()) {
             return true;
         }
-        ItemStack heldItem = player.getMainHandStack();
-        if (DiggusMaximusMod.getOptions().dontBreakTool && heldItem.getDamage() + 1 == heldItem.getMaxDamage()) {
+        ItemStack heldItem = player.getMainHandItem();
+        if (DiggusMaximusMod.getOptions().dontBreakTool && heldItem.getDamageValue() + 1 == heldItem.getMaxDamage()) {
             return false;
         }
         if (heldItem.getItem() != tool) {
@@ -94,6 +94,6 @@ public class ExcavateHelper {
     }
 
     private static boolean isTool(ItemStack stack) {
-        return stack.isDamageable() || DiggusMaximusMod.getOptions().tools.contains(Registries.ITEM.getId(stack.getItem()).toString());
+        return stack.isDamageableItem() || DiggusMaximusMod.getOptions().tools.contains(BuiltInRegistries.ITEM.getKey(stack.getItem()).toString());
     }
 }

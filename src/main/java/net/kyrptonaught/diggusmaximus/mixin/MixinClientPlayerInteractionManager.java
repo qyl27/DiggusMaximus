@@ -5,13 +5,13 @@ import net.fabricmc.api.Environment;
 import net.kyrptonaught.diggusmaximus.DiggusMaximusClientMod;
 import net.kyrptonaught.diggusmaximus.DiggusMaximusMod;
 import net.kyrptonaught.diggusmaximus.StartExcavatePacket;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerInteractionManager;
-import net.minecraft.registry.Registries;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.MultiPlayerGameMode;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -21,29 +21,32 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Environment(EnvType.CLIENT)
-@Mixin(ClientPlayerInteractionManager.class)
+@Mixin(MultiPlayerGameMode.class)
 public abstract class MixinClientPlayerInteractionManager {
 
     @Shadow
     @Final
-    private MinecraftClient client;
+    private Minecraft minecraft;
 
-    @Inject(method = "breakBlock", at = @At(value = "HEAD"))
-    private void DIGGUS$BREAKBLOCK(BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
-        if (DiggusMaximusMod.getOptions().enabled && DiggusMaximusClientMod.getActivationKey().isKeybindPressed())
-            DIGGUS$activate(pos, null, -1);
-        else if (DiggusMaximusMod.getExcavatingShapes().enableShapes && DiggusMaximusClientMod.getShapeKey().isKeybindPressed()) {
+    @Inject(method = "destroyBlock", at = @At(value = "HEAD"))
+    private void beforeDestroyBlock(BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
+        if (DiggusMaximusMod.getOptions().enabled
+                && DiggusMaximusClientMod.getActivationKey().isKeybindPressed()) {
+            diggus$activate(pos, null, -1);
+        } else if (DiggusMaximusMod.getExcavatingShapes().enableShapes
+                && DiggusMaximusClientMod.getShapeKey().isKeybindPressed()) {
             Direction facing = null;
-            HitResult result = client.player.raycast(10, 0, false);
-            if (result.getType() == HitResult.Type.BLOCK)
-                facing = ((BlockHitResult) result).getSide();
+            HitResult result = minecraft.player.pick(10, 0, false);
+            if (result.getType() == HitResult.Type.BLOCK) {
+                facing = ((BlockHitResult) result).getDirection();
+            }
             int selection = DiggusMaximusMod.getExcavatingShapes().selectedShape.ordinal();
-            DIGGUS$activate(pos, facing, selection);
+            diggus$activate(pos, facing, selection);
         }
     }
 
     @Unique
-    private void DIGGUS$activate(BlockPos pos, Direction facing, int shapeSelection) {
-        StartExcavatePacket.sendExcavatePacket(pos, Registries.BLOCK.getId(this.client.world.getBlockState(pos).getBlock()), facing, shapeSelection);
+    private void diggus$activate(BlockPos pos, Direction facing, int shapeSelection) {
+        StartExcavatePacket.sendExcavatePacket(pos, BuiltInRegistries.BLOCK.getKey(minecraft.level.getBlockState(pos).getBlock()), facing, shapeSelection);
     }
 }

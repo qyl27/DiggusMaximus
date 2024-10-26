@@ -7,8 +7,8 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.kyrptonaught.kyrptconfig.keybinding.CustomKeyBinding;
 import net.kyrptonaught.kyrptconfig.keybinding.DisplayOnlyKeyBind;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.Text;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
 
 @Environment(EnvType.CLIENT)
 public class DiggusMaximusClientMod implements ClientModInitializer {
@@ -18,15 +18,15 @@ public class DiggusMaximusClientMod implements ClientModInitializer {
         ClientTickEvents.END_WORLD_TICK.register(clientWorld -> {
             if (DiggusMaximusMod.getExcavatingShapes().enableShapes && getCycleKey().wasPressed()) {
                 int currentSelectiong = DiggusMaximusMod.getExcavatingShapes().selectedShape.ordinal();
-                if (MinecraftClient.getInstance().player.isSneaking())
+                if (Minecraft.getInstance().player.isShiftKeyDown())
                     currentSelectiong--;
                 else currentSelectiong++;
-                if (currentSelectiong >= ExcavateTypes.shape.values().length)
+                if (currentSelectiong >= ExcavateTypes.Shape.values().length)
                     currentSelectiong = 0;
                 else if (currentSelectiong < 0)
-                    currentSelectiong = ExcavateTypes.shape.values().length - 1;
-                DiggusMaximusMod.getExcavatingShapes().selectedShape = ExcavateTypes.shape.values()[currentSelectiong];
-                MinecraftClient.getInstance().player.sendMessage(Text.translatable("diggusmaximus.shape." + ExcavateTypes.shape.values()[currentSelectiong]), true);
+                    currentSelectiong = ExcavateTypes.Shape.values().length - 1;
+                DiggusMaximusMod.getExcavatingShapes().selectedShape = ExcavateTypes.Shape.values()[currentSelectiong];
+                Minecraft.getInstance().player.displayClientMessage(Component.translatable("diggusmaximus.shape." + ExcavateTypes.Shape.values()[currentSelectiong]), true);
                 DiggusMaximusMod.configManager.save();
             }
         });

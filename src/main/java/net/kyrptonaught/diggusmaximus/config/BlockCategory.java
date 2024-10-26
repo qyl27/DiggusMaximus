@@ -3,7 +3,7 @@ package net.kyrptonaught.diggusmaximus.config;
 import blue.endless.jankson.Comment;
 import net.kyrptonaught.kyrptconfig.TagHelper;
 import net.kyrptonaught.kyrptconfig.config.AbstractConfigFile;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,16 +15,18 @@ public class BlockCategory implements AbstractConfigFile {
     @Comment("BlockID to be considered the same block when excavating (IDs separated by commas)")
     public List<String> groups = new ArrayList<>();
 
-    public transient HashMap<Identifier, Identifier> lookup = new HashMap<>();
+    public transient HashMap<ResourceLocation, ResourceLocation> lookup = new HashMap<>();
 
     public void generateLookup() {
         lookup.clear();
         groups.forEach(group -> {
-            List<Identifier> expanded = new ArrayList<>();
+            List<ResourceLocation> expanded = new ArrayList<>();
             for (String item : group.split(",")) {
-                if (item.startsWith("#"))
-                    expanded.addAll(TagHelper.getBlockIDsInTag(Identifier.of(item.replaceAll("#", ""))));
-                else expanded.add(Identifier.tryParse(item));
+                if (item.startsWith("#")) {
+                    expanded.addAll(TagHelper.getBlockIDsInTag(ResourceLocation.parse(item.replaceAll("#", ""))));
+                } else {
+                    expanded.add(ResourceLocation.tryParse(item));
+                }
             }
 
             for (int i = 1; i < expanded.size(); i++) {

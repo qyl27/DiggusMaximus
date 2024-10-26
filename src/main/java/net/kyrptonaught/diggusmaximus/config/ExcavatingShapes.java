@@ -4,7 +4,6 @@ import blue.endless.jankson.Comment;
 import net.kyrptonaught.diggusmaximus.ExcavateTypes;
 import net.kyrptonaught.diggusmaximus.client.DiggusKeyBinding;
 import net.kyrptonaught.kyrptconfig.config.AbstractConfigFile;
-import net.kyrptonaught.kyrptconfig.config.ConfigWDefaults;
 
 public class ExcavatingShapes implements AbstractConfigFile {
     @Comment("Should shape excavating be enabled")
@@ -20,6 +19,5 @@ public class ExcavatingShapes implements AbstractConfigFile {
     public DiggusKeyBinding cycleKey = new DiggusKeyBinding(false, false, "key.keyboard.unknown");
 
     @Comment("Currently selected shape")
-    public ExcavateTypes.shape selectedShape = ExcavateTypes.shape.LAYER;
-
+    public ExcavateTypes.Shape selectedShape = ExcavateTypes.Shape.LAYER;
 }

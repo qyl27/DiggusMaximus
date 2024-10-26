@@ -1,18 +1,17 @@
 package net.kyrptonaught.diggusmaximus;
 
-
-import io.netty.buffer.Unpooled;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.codec.PacketCodec;
-import net.minecraft.network.packet.CustomPayload;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 public class StartExcavatePacket {
     static void registerReceivePacket() {
@@ -23,7 +22,7 @@ public class StartExcavatePacket {
             var server = player.server;
             server.execute(() -> {
                 if (DiggusMaximusMod.getOptions().enabled) {
-                    if (payload.pos().isWithinDistance(player.getPos(), 10)) {
+                    if (payload.pos().closerToCenterThan(player.position(), 10)) {
                         new Excavate(payload.pos(), payload.id(), player, payload.facing()).startExcavate(payload.shape());
                     }
                 }
@@ -32,35 +31,36 @@ public class StartExcavatePacket {
     }
 
     @Environment(EnvType.CLIENT)
-    public static void sendExcavatePacket(BlockPos pos, Identifier id, Direction facing, int shape) {
+    public static void sendExcavatePacket(BlockPos pos, ResourceLocation id, Direction facing, int shape) {
         ClientPlayNetworking.send(new ExcavatePayload(pos, id, facing, shape));
     }
 
-    public record ExcavatePayload(BlockPos pos, Identifier id, Direction facing, int shape) implements CustomPayload {
-        public static final Identifier IDENTIFIER = Identifier.of(DiggusMaximusMod.MOD_ID, "start_excavate_packet");
+    public record ExcavatePayload(BlockPos pos, ResourceLocation id, Direction facing,
+                                  int shape) implements CustomPacketPayload {
+        public static final ResourceLocation IDENTIFIER = ResourceLocation.fromNamespaceAndPath(DiggusMaximusMod.MOD_ID, "start_excavate_packet");
 
-        public static final Id<ExcavatePayload> PACKET_ID = new Id<>(IDENTIFIER);
+        public static final Type<ExcavatePayload> PACKET_ID = new Type<>(IDENTIFIER);
 
-        public static final PacketCodec<PacketByteBuf, ExcavatePayload> CODEC = PacketCodec.ofStatic(ExcavatePayload::write, ExcavatePayload::from);
+        public static final StreamCodec<FriendlyByteBuf, ExcavatePayload> CODEC = StreamCodec.of(ExcavatePayload::write, ExcavatePayload::from);
 
         @Override
-        public Id<? extends CustomPayload> getId() {
+        public @NotNull Type<? extends CustomPacketPayload> type() {
             return PACKET_ID;
         }
 
-        public static ExcavatePayload from(PacketByteBuf buf) {
+        public static ExcavatePayload from(FriendlyByteBuf buf) {
             var pos = buf.readBlockPos();
-            var id = buf.readIdentifier();
+            var id = buf.readResourceLocation();
             var facingId = buf.readInt();
-            var facing = facingId == -1 ? null : Direction.byId(facingId);
+            var facing = facingId == -1 ? null : Direction.from3DDataValue(facingId);
             var shape = buf.readInt();
             return new ExcavatePayload(pos, id, facing, shape);
         }
 
-        public static void write(PacketByteBuf buf, ExcavatePayload payload) {
+        public static void write(FriendlyByteBuf buf, ExcavatePayload payload) {
             buf.writeBlockPos(payload.pos);
-            buf.writeIdentifier(payload.id);
-            buf.writeInt(payload.facing == null ? -1 : payload.facing.getId());
+            buf.writeResourceLocation(payload.id);
+            buf.writeInt(payload.facing == null ? -1 : payload.facing.get3DDataValue());
             buf.writeInt(payload.shape);
         }
     }

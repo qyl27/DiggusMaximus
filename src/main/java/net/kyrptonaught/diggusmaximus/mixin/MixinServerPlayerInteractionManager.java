@@ -2,42 +2,42 @@ package net.kyrptonaught.diggusmaximus.mixin;
 
 import net.kyrptonaught.diggusmaximus.DiggusMaximusMod;
 import net.kyrptonaught.diggusmaximus.Excavate;
-import net.minecraft.registry.Registries;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.network.ServerPlayerInteractionManager;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerPlayerGameMode;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-@Mixin(ServerPlayerInteractionManager.class)
+@Mixin(ServerPlayerGameMode.class)
 public class MixinServerPlayerInteractionManager {
 
     @Shadow
     @Final
-    protected ServerPlayerEntity player;
+    protected ServerPlayer player;
 
     @Shadow
-    protected ServerWorld world;
+    protected ServerLevel level;
 
-    @Redirect(method = "finishMining", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/network/ServerPlayerInteractionManager;tryBreakBlock(Lnet/minecraft/util/math/BlockPos;)Z"))
-    public boolean sneakBreak(ServerPlayerInteractionManager serverPlayerInteractionManager, BlockPos pos) {
+    @Redirect(method = "destroyAndAck", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerPlayerGameMode;destroyBlock(Lnet/minecraft/core/BlockPos;)Z"))
+    public boolean diggus$redirect$destroyAndAck$destroyBlock(ServerPlayerGameMode instance, BlockPos pos) {
         if (DiggusMaximusMod.getOptions().sneakToExcavate) {
-            Identifier blockId = Registries.BLOCK.getId(this.world.getBlockState(pos).getBlock());
-            boolean result = serverPlayerInteractionManager.tryBreakBlock(pos);
+            ResourceLocation blockId = BuiltInRegistries.BLOCK.getKey(level.getBlockState(pos).getBlock());
+            boolean result = instance.destroyBlock(pos);
             if (result) {
-                if (DiggusMaximusMod.getOptions().sneakToExcavate && player.isSneaking()) {
-                    if (pos.isWithinDistance(player.getPos(), 10)) {
+                if (DiggusMaximusMod.getOptions().sneakToExcavate && player.isShiftKeyDown()) {
+                    if (pos.closerToCenterThan(player.position(), 10)) {
                         new Excavate(pos, blockId, player, null).startExcavate(-1);
                     }
                 }
             }
             return result;
         }
-        return serverPlayerInteractionManager.tryBreakBlock(pos);
+        return instance.destroyBlock(pos);
     }
 }

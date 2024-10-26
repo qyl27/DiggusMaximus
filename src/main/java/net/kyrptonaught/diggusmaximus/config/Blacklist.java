@@ -3,8 +3,7 @@ package net.kyrptonaught.diggusmaximus.config;
 import blue.endless.jankson.Comment;
 import net.kyrptonaught.kyrptconfig.TagHelper;
 import net.kyrptonaught.kyrptconfig.config.AbstractConfigFile;
-import net.minecraft.util.Identifier;
-
+import net.minecraft.resources.ResourceLocation;
 import java.util.HashSet;
 
 public class Blacklist implements AbstractConfigFile {
@@ -22,10 +21,12 @@ public class Blacklist implements AbstractConfigFile {
             if (entry.startsWith("#")) {
                 entry = entry.replaceAll("#", "");
 
-                TagHelper.getBlockIDsInTag(Identifier.of(entry)).forEach(identifier ->
+                TagHelper.getBlockIDsInTag(ResourceLocation.parse(entry)).forEach(identifier ->
                         lookup.add(identifier.toString()));
 
-            } else lookup.add(Identifier.of(entry).toString());
+            } else {
+                lookup.add(ResourceLocation.parse(entry).toString());
+            }
         });
     }
 }
