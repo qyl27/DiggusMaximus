@@ -29,6 +29,9 @@
     ],
     "modmenu": [
       "net.kyrptonaught.diggusmaximus.config.modmenu.ModMenuIntegration"
+    ],
+    "fabric-datagen": [
+      "net.kyrptonaught.diggusmaximus.data.DiggusMaximusData"
     ]
   },
   "depends": {

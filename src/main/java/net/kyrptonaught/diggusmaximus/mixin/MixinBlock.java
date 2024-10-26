@@ -2,6 +2,7 @@ package net.kyrptonaught.diggusmaximus.mixin;
 
 import net.kyrptonaught.diggusmaximus.DiggingPlayerEntity;
 import net.kyrptonaught.diggusmaximus.DiggusMaximusMod;
+import net.kyrptonaught.diggusmaximus.config.ConfigHelper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
 import org.spongepowered.asm.mixin.Mixin;
@@ -17,9 +18,10 @@ public class MixinBlock {
             player.causeFoodExhaustion(exhaustion);
             return;
         }
-        if (!DiggusMaximusMod.getOptions().playerExhaustion) {
+        var options = ConfigHelper.getConfig().config;
+        if (!options.playerExhaustion) {
             return;
         }
-        player.causeFoodExhaustion(exhaustion * DiggusMaximusMod.getOptions().exhaustionMultiplier);
+        player.causeFoodExhaustion(exhaustion * options.exhaustionMultiplier);
     }
 }

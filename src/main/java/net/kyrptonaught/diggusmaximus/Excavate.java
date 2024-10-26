@@ -1,14 +1,18 @@
 package net.kyrptonaught.diggusmaximus;
 
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
+import net.kyrptonaught.diggusmaximus.config.ConfigHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -16,24 +20,24 @@ import java.util.Deque;
 public class Excavate {
     private final BlockPos startPos;
     private final Player player;
-    private ResourceLocation startID;
+    private ResourceKey<Block> startId;
     private final Item startTool;
     private int mined = 0;
-    private final Level world;
+    private final Level level;
+
+    private final BlockState startBlock;
     private final Deque<BlockPos> points = new ArrayDeque<>();
 
     private final Direction facing;
     private int shapeSelection = -1;
 
-    private static final int airHash = ResourceLocation.parse("minecraft:air").hashCode();
-
-    public Excavate(BlockPos pos, ResourceLocation blockID, Player player, Direction facing) {
+    public Excavate(BlockPos pos, ResourceLocation startId, Player player, Direction facing) {
         this.startPos = pos;
         this.player = player;
-        this.world = player.getCommandSenderWorld();
-        if (ExcavateHelper.configAllowsMining(blockID.toString())) {
-            this.startID = blockID;
-        }
+        this.level = player.getCommandSenderWorld();
+        this.startId = ResourceKey.create(Registries.BLOCK, startId);
+
+        this.startBlock = this.level.getBlockState(pos);
 
         this.startTool = player.getMainHandItem().getItem();
         this.facing = facing;
@@ -42,9 +46,10 @@ public class Excavate {
     public void startExcavate(int shapeSelection) {
         this.shapeSelection = shapeSelection;
         forceExcavateAt(startPos);
-        if (startID == null) {
+        if (startBlock.is(startId) && ExcavateHelper.isBlockBlocked(startBlock)) {
             return;
         }
+
         ((DiggingPlayerEntity) player).diggus$setExcavating(true);
         while (!points.isEmpty()) {
             spread(points.remove());
@@ -61,27 +66,27 @@ public class Excavate {
     }
 
     private void excavateAt(BlockPos pos) {
-        if (mined >= ExcavateHelper.maxMined) {
+        if (mined >= ConfigHelper.getConfig().config.maxMinedBlocks) {
             return;
         }
-        ResourceLocation block = BuiltInRegistries.BLOCK.getKey(ExcavateHelper.getBlockAt(world, pos));
-        if (block.hashCode() != airHash
-                && ExcavateHelper.isTheSameBlock(startID, block, world, shapeSelection)
-                && ExcavateHelper.canMine(player, startTool, world, startPos, pos)
+        var block = ExcavateHelper.getBlockAt(level, pos);
+        if (!block.isAir()
+                && ExcavateHelper.isTheSameBlock(startBlock, block, shapeSelection)
+                && ExcavateHelper.canMine(player, startTool, level, startPos, pos)
                 && isExcavatingAllowed(pos)) {
             forceExcavateAt(pos);
         }
     }
 
     private boolean isExcavatingAllowed(BlockPos pos) {
-        return PlayerBlockBreakEvents.BEFORE.invoker().beforeBlockBreak(world, player, pos, world.getBlockState(pos), world.getBlockEntity(pos)) && ((ServerPlayer) player).gameMode.destroyBlock(pos);
+        return PlayerBlockBreakEvents.BEFORE.invoker().beforeBlockBreak(level, player, pos, level.getBlockState(pos), level.getBlockEntity(pos)) && ((ServerPlayer) player).gameMode.destroyBlock(pos);
     }
 
     private void forceExcavateAt(BlockPos pos) {
         points.add(pos);
         mined++;
-        if (DiggusMaximusMod.getOptions().autoPickup) {
-            ExcavateHelper.pickupDrops(world, pos, player);
+        if (ConfigHelper.getConfig().config.autoPickup) {
+            ExcavateHelper.pickupDrops(level, pos, player);
         }
     }
 }

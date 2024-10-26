@@ -1,19 +1,18 @@
-package net.kyrptonaught.diggusmaximus.config;
+package net.kyrptonaught.diggusmaximus.config.category;
 
-import blue.endless.jankson.Comment;
-import net.kyrptonaught.diggusmaximus.client.DiggusKeyBinding;
-import net.kyrptonaught.kyrptconfig.config.AbstractConfigFile;
-import net.kyrptonaught.kyrptconfig.config.ConfigWDefaults;
+import me.shedaniel.autoconfig.ConfigData;
+import me.shedaniel.autoconfig.annotation.Config;
+import me.shedaniel.autoconfig.annotation.ConfigEntry;
+import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 
-public class ConfigOptions implements AbstractConfigFile {
+@Config(name = "blacklist")
+public class ConfigOptions implements ConfigData {
 
     @Comment("Mod enabled or disabled")
     public boolean enabled = true;
-
-    @Comment("Activation key")
-    public DiggusKeyBinding keybinding = new DiggusKeyBinding(true, true, "key.keyboard.grave.accent");
 
     @Comment("Inverts the keybinding activation")
     public boolean invertActivation = false;
@@ -25,9 +24,11 @@ public class ConfigOptions implements AbstractConfigFile {
     public boolean mineDiag = true;
 
     @Comment("Maximum number of blocks to mine")
+    @ConfigEntry.BoundedDiscrete(max = 2048)
     public int maxMinedBlocks = 40;
 
     @Comment("Maximum distance from start to mine")
+    @ConfigEntry.BoundedDiscrete(max = 128)
     public int maxMineDistance = 10;
 
     @Comment("Automatically pick up drops")
@@ -52,5 +53,5 @@ public class ConfigOptions implements AbstractConfigFile {
     public float exhaustionMultiplier = 1.0f;
 
     @Comment("Other items to be considered tools ie: \"minecraft:stick\"")
-    public HashSet<String> tools = new HashSet<>();
+    public List<String> tools = new ArrayList<>();
 }

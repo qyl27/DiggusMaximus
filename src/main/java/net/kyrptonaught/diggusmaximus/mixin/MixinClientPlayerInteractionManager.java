@@ -5,6 +5,7 @@ import net.fabricmc.api.Environment;
 import net.kyrptonaught.diggusmaximus.DiggusMaximusClientMod;
 import net.kyrptonaught.diggusmaximus.DiggusMaximusMod;
 import net.kyrptonaught.diggusmaximus.StartExcavatePacket;
+import net.kyrptonaught.diggusmaximus.config.ConfigHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.core.BlockPos;
@@ -30,18 +31,32 @@ public abstract class MixinClientPlayerInteractionManager {
 
     @Inject(method = "destroyBlock", at = @At(value = "HEAD"))
     private void beforeDestroyBlock(BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
-        if (DiggusMaximusMod.getOptions().enabled
-                && DiggusMaximusClientMod.getActivationKey().isKeybindPressed()) {
-            diggus$activate(pos, null, -1);
-        } else if (DiggusMaximusMod.getExcavatingShapes().enableShapes
-                && DiggusMaximusClientMod.getShapeKey().isKeybindPressed()) {
-            Direction facing = null;
-            HitResult result = minecraft.player.pick(10, 0, false);
-            if (result.getType() == HitResult.Type.BLOCK) {
-                facing = ((BlockHitResult) result).getDirection();
+        var config = ConfigHelper.getConfig();
+        if (config.config.enabled) {
+            var pressed = config.config.invertActivation;
+            while (DiggusMaximusClientMod.EXCAVATE.consumeClick()) {
+                pressed = !config.config.invertActivation;
             }
-            int selection = DiggusMaximusMod.getExcavatingShapes().selectedShape.ordinal();
-            diggus$activate(pos, facing, selection);
+            if (pressed) {
+                diggus$activate(pos, null, -1);
+            }
+            return;
+        }
+
+        if (config.shapes.enableShapes) {
+            var pressed = config.config.invertActivation;
+            while (DiggusMaximusClientMod.SHAPED.consumeClick()) {
+                pressed = !config.config.invertActivation;
+            }
+            if (pressed) {
+                Direction facing = null;
+                HitResult result = minecraft.player.pick(10, 0, false);
+                if (result.getType() == HitResult.Type.BLOCK) {
+                    facing = ((BlockHitResult) result).getDirection();
+                }
+                int selection = config.shapes.selectedShape.ordinal();
+                diggus$activate(pos, facing, selection);
+            }
         }
     }
 
