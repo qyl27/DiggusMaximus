@@ -32,22 +32,20 @@ public abstract class MixinClientPlayerInteractionManager {
     @Inject(method = "destroyBlock", at = @At(value = "HEAD"))
     private void beforeDestroyBlock(BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
         var config = ConfigHelper.getConfig();
-        if (config.config.enabled) {
-            var pressed = config.config.invertActivation;
-            while (DiggusMaximusClientMod.EXCAVATE.consumeClick()) {
-                pressed = !config.config.invertActivation;
-            }
-            if (pressed) {
-                diggus$activate(pos, null, -1);
-            }
+        if (!config.config.enabled) {
             return;
         }
 
-        if (config.shapes.enableShapes) {
-            var pressed = config.config.invertActivation;
-            while (DiggusMaximusClientMod.SHAPED.consumeClick()) {
-                pressed = !config.config.invertActivation;
+        {
+            var pressed = config.config.invertActivation ^ DiggusMaximusClientMod.EXCAVATE.isDown();
+            if (pressed) {
+                diggus$activate(pos, null, -1);
+                return;
             }
+        }
+
+        if (config.shapes.enableShapes) {
+            var pressed = config.config.invertActivation ^ DiggusMaximusClientMod.SHAPED.isDown();
             if (pressed) {
                 Direction facing = null;
                 HitResult result = minecraft.player.pick(10, 0, false);

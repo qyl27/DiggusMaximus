@@ -32,7 +32,7 @@ public class ConfigHelper {
 
     private static ConfigHolder<ModConfig> holder;
 
-    public static ModConfig getConfig() {
+    private static ConfigHolder<ModConfig> getHolder() {
         if (holder == null) {
             holder = AutoConfig.getConfigHolder(ModConfig.class);
             holder.registerSaveListener((holder, config) -> {
@@ -41,7 +41,15 @@ public class ConfigHelper {
                 return InteractionResult.SUCCESS;
             });
         }
-        return holder.get();
+        return holder;
+    }
+
+    public static ModConfig getConfig() {
+        return getHolder().get();
+    }
+
+    public static void save() {
+        getHolder().save();
     }
 
     public static Either<ResourceKey<Block>, TagKey<Block>> parseBlockOrTag(String s) {

@@ -41,6 +41,7 @@ public class DiggusMaximusClientMod implements ClientModInitializer {
                     selected %= shapesCount;
                 }
                 config.shapes.selectedShape = ExcavateTypes.Shape.values()[selected];
+                ConfigHelper.save();
                 Minecraft.getInstance().player.displayClientMessage(Component.translatable("diggusmaximus.shape." + ExcavateTypes.Shape.values()[selected].toString().toLowerCase(Locale.ROOT)), true);
             }
         });

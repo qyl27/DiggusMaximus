@@ -63,6 +63,7 @@ public class Options implements ConfigData {
     @Comment("Other items to be considered tools ie: \"minecraft:stick\"")
     public List<String> tools = new ArrayList<>();
 
+    @ConfigEntry.Gui.Excluded
     public final Set<Either<ResourceKey<Item>, TagKey<Item>>> customTools = new HashSet<>();
 
     @Override
