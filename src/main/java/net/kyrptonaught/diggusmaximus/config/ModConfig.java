@@ -6,14 +6,14 @@ import me.shedaniel.autoconfig.serializer.PartitioningSerializer;
 import net.kyrptonaught.diggusmaximus.ModConstants;
 import net.kyrptonaught.diggusmaximus.config.category.BlockGroups;
 import net.kyrptonaught.diggusmaximus.config.category.BlockList;
-import net.kyrptonaught.diggusmaximus.config.category.ConfigOptions;
+import net.kyrptonaught.diggusmaximus.config.category.Options;
 import net.kyrptonaught.diggusmaximus.config.category.ExcavatingShapes;
 
 @Config(name = ModConstants.MOD_ID)
 public class ModConfig extends PartitioningSerializer.GlobalData {
     @ConfigEntry.Category("config")
     @ConfigEntry.Gui.TransitiveObject
-    public ConfigOptions config = new ConfigOptions();
+    public Options config = new Options();
 
     @ConfigEntry.Category("blacklist")
     @ConfigEntry.Gui.TransitiveObject

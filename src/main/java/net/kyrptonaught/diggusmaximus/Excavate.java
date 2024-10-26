@@ -4,6 +4,8 @@ import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.kyrptonaught.diggusmaximus.config.ConfigHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -16,6 +18,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.Optional;
 
 public class Excavate {
     private final BlockPos startPos;
@@ -25,7 +28,7 @@ public class Excavate {
     private int mined = 0;
     private final Level level;
 
-    private final BlockState startBlock;
+    private final Optional<Holder.Reference<Block>> startBlock;
     private final Deque<BlockPos> points = new ArrayDeque<>();
 
     private final Direction facing;
@@ -37,7 +40,7 @@ public class Excavate {
         this.level = player.getCommandSenderWorld();
         this.startId = ResourceKey.create(Registries.BLOCK, startId);
 
-        this.startBlock = this.level.getBlockState(pos);
+        this.startBlock = BuiltInRegistries.BLOCK.get(startId);
 
         this.startTool = player.getMainHandItem().getItem();
         this.facing = facing;
@@ -46,7 +49,8 @@ public class Excavate {
     public void startExcavate(int shapeSelection) {
         this.shapeSelection = shapeSelection;
         forceExcavateAt(startPos);
-        if (startBlock.is(startId) && ExcavateHelper.isBlockBlocked(startBlock)) {
+        if (startBlock.isEmpty()
+                || (startBlock.orElseThrow().is(startId) && ExcavateHelper.isBlockBlocked(startBlock.orElseThrow()))) {
             return;
         }
 
@@ -71,7 +75,7 @@ public class Excavate {
         }
         var block = ExcavateHelper.getBlockAt(level, pos);
         if (!block.isAir()
-                && ExcavateHelper.isTheSameBlock(startBlock, block, shapeSelection)
+                && ExcavateHelper.isTheSameBlock(startBlock.orElseThrow(), block, shapeSelection)
                 && ExcavateHelper.canMine(player, startTool, level, startPos, pos)
                 && isExcavatingAllowed(pos)) {
             forceExcavateAt(pos);

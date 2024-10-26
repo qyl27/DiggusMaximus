@@ -4,6 +4,7 @@ import java.util.List;
 
 import net.kyrptonaught.diggusmaximus.config.ConfigHelper;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -27,7 +28,7 @@ public class ExcavateHelper {
         });
     }
 
-    public static boolean isTheSameBlock(BlockState original, BlockState newBlock, int shapeSelection) {
+    public static boolean isTheSameBlock(Holder.Reference<Block> original, BlockState newBlock, int shapeSelection) {
         if (shapeSelection > -1 && ConfigHelper.getConfig().shapes.includeDifBlocks) {
             return true;
         }
@@ -52,10 +53,10 @@ public class ExcavateHelper {
             }
         }
 
-        return original.is(newBlock.getBlock());
+        return original.is(newBlock.getBlockHolder());
     }
 
-    public static boolean isBlockBlocked(BlockState block) {
+    public static boolean isBlockBlocked(Holder.Reference<Block> block) {
         var config = ConfigHelper.getConfig().blockList;
         if (config.isWhitelist) {
             for (var e : config.blocked) {
@@ -114,6 +115,17 @@ public class ExcavateHelper {
     }
 
     private static boolean isTool(ItemStack stack) {
-        return stack.isDamageableItem() || ConfigHelper.getConfig().config.tools.contains(BuiltInRegistries.ITEM.getKey(stack.getItem()).toString());
+        if (stack.isDamageableItem()) {
+            return true;
+        }
+
+        for (var e : ConfigHelper.getConfig().config.customTools) {
+            var v = e.map(l -> stack.getItemHolder().is(l), stack::is);
+            if (v) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

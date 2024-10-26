@@ -1,15 +1,23 @@
 package net.kyrptonaught.diggusmaximus.config.category;
 
+import com.mojang.datafixers.util.Either;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
+import net.kyrptonaught.diggusmaximus.config.ConfigHelper;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-@Config(name = "blacklist")
-public class ConfigOptions implements ConfigData {
+@Config(name = "config")
+public class Options implements ConfigData {
 
     @Comment("Mod enabled or disabled")
     public boolean enabled = true;
@@ -54,4 +62,23 @@ public class ConfigOptions implements ConfigData {
 
     @Comment("Other items to be considered tools ie: \"minecraft:stick\"")
     public List<String> tools = new ArrayList<>();
+
+    public final Set<Either<ResourceKey<Item>, TagKey<Item>>> customTools = new HashSet<>();
+
+    @Override
+    public void validatePostLoad() throws ValidationException {
+        try {
+            update();
+        } catch (Exception ex) {
+            throw new ValidationException(ex);
+        }
+    }
+
+    public void update() {
+        customTools.clear();
+
+        for (var s : tools) {
+            customTools.add(ConfigHelper.parseItemOrTag(s));
+        }
+    }
 }

@@ -25,19 +25,22 @@ public class BlockGroups implements ConfigData {
 
     @Override
     public void validatePostLoad() throws ValidationException {
-        ConfigData.super.validatePostLoad();
-        blockGroups.clear();
-
         try {
-            for (var g : groups) {
-                var set = new HashSet<Either<ResourceKey<Block>, TagKey<Block>>>();
-                for (var s : g.split(",")) {
-                    set.add(ConfigHelper.parseBlockOrTag(s));
-                }
-                blockGroups.add(set);
-            }
+            update();
         } catch (Exception ex) {
             throw new ValidationException(ex);
+        }
+    }
+
+    public void update() {
+        blockGroups.clear();
+
+        for (var g : groups) {
+            var set = new HashSet<Either<ResourceKey<Block>, TagKey<Block>>>();
+            for (var s : g.split(",")) {
+                set.add(ConfigHelper.parseBlockOrTag(s));
+            }
+            blockGroups.add(set);
         }
     }
 }

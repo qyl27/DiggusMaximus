@@ -31,11 +31,17 @@ public class BlockList implements ConfigData {
         blocked.clear();
 
         try {
-            for (var s : blacklistedBlocks) {
-                blocked.add(ConfigHelper.parseBlockOrTag(s));
-            }
+            update();
         } catch (Exception ex) {
             throw new ValidationException(ex);
+        }
+    }
+
+    public void update() {
+        blocked.clear();
+
+        for (var s : blacklistedBlocks) {
+            blocked.add(ConfigHelper.parseBlockOrTag(s));
         }
     }
 }
