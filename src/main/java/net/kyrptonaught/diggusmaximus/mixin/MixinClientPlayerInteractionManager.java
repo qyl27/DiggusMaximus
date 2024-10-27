@@ -3,7 +3,7 @@ package net.kyrptonaught.diggusmaximus.mixin;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.kyrptonaught.diggusmaximus.DiggusMaximusClientMod;
-import net.kyrptonaught.diggusmaximus.networking.StartExcavatePacket;
+import net.kyrptonaught.diggusmaximus.networking.ExcavateNetworking;
 import net.kyrptonaught.diggusmaximus.config.ConfigHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
@@ -59,6 +59,6 @@ public abstract class MixinClientPlayerInteractionManager {
 
     @Unique
     private void diggus$activate(BlockPos pos, Direction facing, int shapeSelection) {
-        StartExcavatePacket.sendExcavatePacket(pos, BuiltInRegistries.BLOCK.getKey(minecraft.level.getBlockState(pos).getBlock()), facing, shapeSelection);
+        ExcavateNetworking.sendExcavatePacket(pos, BuiltInRegistries.BLOCK.getKey(minecraft.level.getBlockState(pos).getBlock()), facing, shapeSelection);
     }
 }
