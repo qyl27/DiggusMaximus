@@ -1,6 +1,7 @@
-package net.kyrptonaught.diggusmaximus;
+package net.kyrptonaught.diggusmaximus.excavate;
 
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
+import net.kyrptonaught.diggusmaximus.bridge.PlayerEntityBridge;
 import net.kyrptonaught.diggusmaximus.config.ConfigHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -14,7 +15,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -54,11 +54,11 @@ public class Excavate {
             return;
         }
 
-        ((DiggingPlayerEntity) player).diggus$setExcavating(true);
+        ((PlayerEntityBridge) player).diggus$setExcavating(true);
         while (!points.isEmpty()) {
             spread(points.remove());
         }
-        ((DiggingPlayerEntity) player).diggus$setExcavating(false);
+        ((PlayerEntityBridge) player).diggus$setExcavating(false);
     }
 
     private void spread(BlockPos pos) {

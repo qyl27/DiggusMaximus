@@ -1,6 +1,6 @@
 package net.kyrptonaught.diggusmaximus.mixin;
 
-import net.kyrptonaught.diggusmaximus.Excavate;
+import net.kyrptonaught.diggusmaximus.excavate.Excavate;
 import net.kyrptonaught.diggusmaximus.config.ConfigHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;

@@ -1,7 +1,6 @@
 package net.kyrptonaught.diggusmaximus.mixin;
 
-import net.kyrptonaught.diggusmaximus.DiggingPlayerEntity;
-import net.kyrptonaught.diggusmaximus.DiggusMaximusMod;
+import net.kyrptonaught.diggusmaximus.bridge.PlayerEntityBridge;
 import net.kyrptonaught.diggusmaximus.config.ConfigHelper;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -21,7 +20,7 @@ public class MixinCancelDurability {
     private void beforeHurtAndBreak(int amount, ServerLevel world, ServerPlayer player,
                                     Consumer<Item> breakCallback, CallbackInfo ci) {
         if (player != null
-                && ((DiggingPlayerEntity) player).diggus$isExcavating()
+                && ((PlayerEntityBridge) player).diggus$isExcavating()
                 && !ConfigHelper.getConfig().config.toolDurability) {
             ci.cancel();
         }

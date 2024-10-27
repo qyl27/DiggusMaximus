@@ -1,4 +1,4 @@
-package net.kyrptonaught.diggusmaximus;
+package net.kyrptonaught.diggusmaximus.excavate;
 
 import java.util.ArrayList;
 import java.util.List;

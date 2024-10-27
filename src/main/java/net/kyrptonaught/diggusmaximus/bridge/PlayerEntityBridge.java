@@ -1,6 +1,6 @@
-package net.kyrptonaught.diggusmaximus;
+package net.kyrptonaught.diggusmaximus.bridge;
 
-public interface DiggingPlayerEntity {
+public interface PlayerEntityBridge {
     Boolean diggus$isExcavating();
 
     void diggus$setExcavating(boolean isExcavating);

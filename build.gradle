@@ -104,10 +104,10 @@ unifiedPublishing {
     project {
         displayName = "Diggus Maximus Reborn ${project.mod_version} for ${project.minecraft_version}"
         version = project.version
-        gameVersions = [project.minecraft_version]
+        gameVersions = ['1.21.2', '1.21.3']
         gameLoaders = ['fabric']
         releaseType = 'release'
-        changelog = 'See the GitHub repository for more information. \nhttps://github.com/qyl27/DiggusMaximus'
+        changelog = 'Bug fixes.'
 
         mainPublication tasks.remapJar
 
@@ -116,15 +116,20 @@ unifiedPublishing {
                 curseforge = 'fabric-api'
                 modrinth = 'fabric-api'
             }
-            depends {
+            includes {
                 curseforge = 'cloth-config'
                 modrinth = 'cloth-config'
             }
         }
 
-		curseforge {
-			token = Objects.requireNonNullElse(System.getenv('CURSEFORGE_TOKEN'), '')
-			id = '977886'
-		}
+        curseforge {
+            token = Objects.requireNonNullElse(System.getenv('CURSEFORGE_TOKEN'), '')
+            id = '977886'
+        }
+
+        modrinth {
+            token = Objects.requireNonNullElse(System.getenv('MODRINTH_TOKEN'), '')
+            id = 'tVeR4oKO'
+        }
     }
 }

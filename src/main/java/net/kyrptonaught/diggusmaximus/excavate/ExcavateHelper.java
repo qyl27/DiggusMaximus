@@ -1,11 +1,10 @@
-package net.kyrptonaught.diggusmaximus;
+package net.kyrptonaught.diggusmaximus.excavate;
 
 import java.util.List;
 
 import net.kyrptonaught.diggusmaximus.config.ConfigHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;

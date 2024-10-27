@@ -38,6 +38,7 @@ public class ConfigHelper {
             holder.registerSaveListener((holder, config) -> {
                 config.blockList.update();
                 config.grouping.update();
+                config.config.update();
                 return InteractionResult.SUCCESS;
             });
         }

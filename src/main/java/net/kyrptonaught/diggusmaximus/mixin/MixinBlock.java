@@ -1,7 +1,6 @@
 package net.kyrptonaught.diggusmaximus.mixin;
 
-import net.kyrptonaught.diggusmaximus.DiggingPlayerEntity;
-import net.kyrptonaught.diggusmaximus.DiggusMaximusMod;
+import net.kyrptonaught.diggusmaximus.bridge.PlayerEntityBridge;
 import net.kyrptonaught.diggusmaximus.config.ConfigHelper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
@@ -14,7 +13,7 @@ public class MixinBlock {
 
     @Redirect(method = "playerDestroy", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;causeFoodExhaustion(F)V"))
     private void diggus$redirect$playerDestroy$causeFoodExhaustion(Player player, float exhaustion) {
-        if (!((DiggingPlayerEntity) player).diggus$isExcavating()) {
+        if (!((PlayerEntityBridge) player).diggus$isExcavating()) {
             player.causeFoodExhaustion(exhaustion);
             return;
         }
