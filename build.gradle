@@ -104,7 +104,7 @@ unifiedPublishing {
     project {
         displayName = "Diggus Maximus Reborn ${project.mod_version} for ${project.minecraft_version}"
         version = project.version
-        gameVersions = ['1.21.2', '1.21.3']
+        gameVersions = ['1.21.4']
         gameLoaders = ['fabric']
         releaseType = 'release'
         changelog = 'Bug fixes.'
