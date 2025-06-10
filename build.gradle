@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '1.9-SNAPSHOT'
+    id 'fabric-loom' version '1.10-SNAPSHOT'
     id 'maven-publish'
     id 'me.shedaniel.unified-publishing' version '0.1.+'
 }
@@ -15,6 +15,7 @@ fabricApi {
 repositories {
     mavenLocal()
     maven { url 'https://maven.fabricmc.net' }
+    maven { url 'https://maven.parchmentmc.org' }
     maven { url 'https://maven.yuluo.dev/repository/maven-public' }
     maven { url "https://maven.shedaniel.me/" }
     maven { url 'https://maven.terraformersmc.com/releases' }
@@ -33,6 +34,9 @@ dependencies {
     modApi(include("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}")) {
         exclude(group: 'net.fabricmc.fabric-api')
     }
+
+    compileOnly("org.projectlombok:lombok:${project.lombok_version}")
+    annotationProcessor("org.projectlombok:lombok:${project.lombok_version}")
 
     modImplementation("com.terraformersmc:modmenu:${project.mod_menu_version}") {
         transitive false

@@ -22,7 +22,7 @@ import java.util.Optional;
 
 public class Excavate {
     private final BlockPos startPos;
-    private final Player player;
+    private final ServerPlayer player;
     private ResourceKey<Block> startId;
     private final Item startTool;
     private int mined = 0;
@@ -34,7 +34,7 @@ public class Excavate {
     private final Direction facing;
     private int shapeSelection = -1;
 
-    public Excavate(BlockPos pos, ResourceLocation startId, Player player, Direction facing) {
+    public Excavate(BlockPos pos, ResourceLocation startId, ServerPlayer player, Direction facing) {
         this.startPos = pos;
         this.player = player;
         this.level = player.getCommandSenderWorld();
@@ -83,7 +83,7 @@ public class Excavate {
     }
 
     private boolean isExcavatingAllowed(BlockPos pos) {
-        return PlayerBlockBreakEvents.BEFORE.invoker().beforeBlockBreak(level, player, pos, level.getBlockState(pos), level.getBlockEntity(pos)) && ((ServerPlayer) player).gameMode.destroyBlock(pos);
+        return player.gameMode.destroyBlock(pos);
     }
 
     private void forceExcavateAt(BlockPos pos) {
