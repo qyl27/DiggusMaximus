@@ -4,19 +4,19 @@ import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
-import net.kyrptonaught.diggusmaximus.excavate.ExcavateTypes;
+import net.kyrptonaught.diggusmaximus.excavate.Shape;
 
 @Config(name = "excavatingshapes")
 public class ExcavatingShapes implements ConfigData {
     @Comment("Should shape excavating be enabled")
-    public boolean enableShapes = false;
+    public boolean enableShapes = true;
 
     @Comment("Should shape excavating include different blocks")
-    public boolean includeDifBlocks = false;
+    public boolean includeDifBlocks = true;
 
     @Comment("Currently selected shape")
     @ConfigEntry.Gui.EnumHandler(
             option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON
     )
-    public ExcavateTypes.Shape selectedShape = ExcavateTypes.Shape.LAYER;
+    public Shape selectedShape = Shape.LAYER;
 }

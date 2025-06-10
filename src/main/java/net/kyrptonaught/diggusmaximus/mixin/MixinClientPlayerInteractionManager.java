@@ -3,6 +3,7 @@ package net.kyrptonaught.diggusmaximus.mixin;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.kyrptonaught.diggusmaximus.DiggusMaximusClientMod;
+import net.kyrptonaught.diggusmaximus.excavate.Shape;
 import net.kyrptonaught.diggusmaximus.networking.ExcavateNetworking;
 import net.kyrptonaught.diggusmaximus.config.ConfigHelper;
 import net.minecraft.client.Minecraft;
@@ -38,7 +39,7 @@ public abstract class MixinClientPlayerInteractionManager {
         {
             var pressed = config.config.invertActivation ^ DiggusMaximusClientMod.EXCAVATE.isDown();
             if (pressed) {
-                diggus$activate(pos, null, -1);
+                ExcavateNetworking.sendExcavatePacket(pos, BuiltInRegistries.BLOCK.getKey(minecraft.level.getBlockState(pos).getBlock()), Shape.NONE, Direction.NORTH);
                 return;
             }
         }
@@ -46,19 +47,13 @@ public abstract class MixinClientPlayerInteractionManager {
         if (config.shapes.enableShapes) {
             var pressed = config.config.invertActivation ^ DiggusMaximusClientMod.SHAPED.isDown();
             if (pressed) {
-                Direction facing = null;
-                HitResult result = minecraft.player.pick(10, 0, false);
+                var shape = config.shapes.selectedShape;
+                var result = minecraft.player.pick(10, 0, false);
                 if (result.getType() == HitResult.Type.BLOCK) {
-                    facing = ((BlockHitResult) result).getDirection();
+                    var facing = ((BlockHitResult) result).getDirection();
+                    ExcavateNetworking.sendExcavatePacket(pos, BuiltInRegistries.BLOCK.getKey(minecraft.level.getBlockState(pos).getBlock()), shape, facing);
                 }
-                int selection = config.shapes.selectedShape.ordinal();
-                diggus$activate(pos, facing, selection);
             }
         }
-    }
-
-    @Unique
-    private void diggus$activate(BlockPos pos, Direction facing, int shapeSelection) {
-        ExcavateNetworking.sendExcavatePacket(pos, BuiltInRegistries.BLOCK.getKey(minecraft.level.getBlockState(pos).getBlock()), facing, shapeSelection);
     }
 }

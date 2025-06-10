@@ -27,8 +27,8 @@ public class ExcavateHelper {
         });
     }
 
-    public static boolean isTheSameBlock(Holder.Reference<Block> original, BlockState newBlock, int shapeSelection) {
-        if (shapeSelection > -1 && ConfigHelper.getConfig().shapes.includeDifBlocks) {
+    public static boolean isTheSameBlock(Holder.Reference<Block> original, BlockState newBlock, Shape shapeSelection) {
+        if (shapeSelection != Shape.NONE && ConfigHelper.getConfig().shapes.includeDifBlocks) {
             return true;
         }
 

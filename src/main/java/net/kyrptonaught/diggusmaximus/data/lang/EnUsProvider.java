@@ -61,12 +61,14 @@ public class EnUsProvider extends FabricLanguageProvider {
         builder.add(buildAutoConfigKey("shapes", "includeDifBlocks"), "Include Different Blocks");
         builder.add(buildAutoConfigKey("shapes", "selectedShape"), "Currently Selected Shape");
 
-        builder.add("diggusmaximus.shape.horizontal_layer", "Horizontal Layer");
-        builder.add("diggusmaximus.shape.layer", "Layer");
-        builder.add("diggusmaximus.shape.hole", "Hole");
-        builder.add("diggusmaximus.shape.one_by_two", "1x2");
-        builder.add("diggusmaximus.shape.one_by_two_tunnel", "1x2 Tunnel");
-        builder.add("diggusmaximus.shape.three_by_three", "3x3");
-        builder.add("diggusmaximus.shape.three_by_three_tunnel", "3x3 Tunnel");
+        builder.add(ModConstants.SHAPE_NONE, "None");
+
+        builder.add(ModConstants.SHAPE_HORIZONTAL_LAYER, "Horizontal Layer");
+        builder.add(ModConstants.SHAPE_LAYER, "Layer");
+        builder.add(ModConstants.SHAPE_HOLE, "Hole");
+        builder.add(ModConstants.SHAPE_ONE_BY_TWO, "1x2");
+        builder.add(ModConstants.SHAPE_ONE_BY_TWO_TUNNEL, "1x2 Tunnel");
+        builder.add(ModConstants.SHAPE_THREE_BY_THREE, "3x3");
+        builder.add(ModConstants.SHAPE_THREE_BY_THREE_TUNNEL, "3x3 Tunnel");
     }
 }

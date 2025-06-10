@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.kyrptonaught.diggusmaximus.config.ConfigHelper;
 import net.kyrptonaught.diggusmaximus.excavate.Excavate;
+import net.kyrptonaught.diggusmaximus.excavate.Shape;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -21,7 +22,7 @@ public class ExcavateNetworking {
             server.execute(() -> {
                 if (ConfigHelper.getConfig().config.enabled) {
                     if (payload.pos().closerToCenterThan(player.position(), 10)) {
-                        new Excavate(payload.pos(), payload.id(), player, payload.facing()).startExcavate(payload.shape());
+                        new Excavate(payload.pos(), payload.id(), player, payload.shape(), payload.facing()).startExcavate();
                     }
                 }
             });
@@ -29,7 +30,7 @@ public class ExcavateNetworking {
     }
 
     @Environment(EnvType.CLIENT)
-    public static void sendExcavatePacket(BlockPos pos, ResourceLocation id, Direction facing, int shape) {
-        ClientPlayNetworking.send(new ExcavatePacket(pos, id, facing, shape));
+    public static void sendExcavatePacket(BlockPos pos, ResourceLocation id, Shape shape, Direction facing) {
+        ClientPlayNetworking.send(new ExcavatePacket(pos, id, shape, facing));
     }
 }

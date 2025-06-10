@@ -1,6 +1,8 @@
 package net.kyrptonaught.diggusmaximus.networking;
 
 import net.kyrptonaught.diggusmaximus.DiggusMaximusMod;
+import net.kyrptonaught.diggusmaximus.ModConstants;
+import net.kyrptonaught.diggusmaximus.excavate.Shape;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
@@ -9,9 +11,8 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
-public record ExcavatePacket(BlockPos pos, ResourceLocation id, Direction facing,
-                             int shape) implements CustomPacketPayload {
-    public static final ResourceLocation IDENTIFIER = ResourceLocation.fromNamespaceAndPath(DiggusMaximusMod.MOD_ID, "start_excavate_packet");
+public record ExcavatePacket(BlockPos pos, ResourceLocation id, Shape shape, Direction facing) implements CustomPacketPayload {
+    public static final ResourceLocation IDENTIFIER = ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "start_excavate_packet");
 
     public static final Type<ExcavatePacket> PACKET_ID = new Type<>(IDENTIFIER);
 
@@ -25,16 +26,15 @@ public record ExcavatePacket(BlockPos pos, ResourceLocation id, Direction facing
     public static ExcavatePacket from(FriendlyByteBuf buf) {
         var pos = buf.readBlockPos();
         var id = buf.readResourceLocation();
-        var facingId = buf.readInt();
-        var facing = facingId == -1 ? null : Direction.from3DDataValue(facingId);
-        var shape = buf.readInt();
-        return new ExcavatePacket(pos, id, facing, shape);
+        var shape = buf.readEnum(Shape.class);
+        var facing = buf.readEnum(Direction.class);
+        return new ExcavatePacket(pos, id, shape, facing);
     }
 
     public static void write(FriendlyByteBuf buf, ExcavatePacket payload) {
         buf.writeBlockPos(payload.pos);
         buf.writeResourceLocation(payload.id);
-        buf.writeInt(payload.facing == null ? -1 : payload.facing.get3DDataValue());
-        buf.writeInt(payload.shape);
+        buf.writeEnum(payload.shape);
+        buf.writeEnum(payload.facing);
     }
 }

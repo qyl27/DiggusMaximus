@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.kyrptonaught.diggusmaximus.config.ConfigHelper;
 import net.kyrptonaught.diggusmaximus.excavate.ExcavateTypes;
+import net.kyrptonaught.diggusmaximus.excavate.Shape;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
@@ -30,20 +31,15 @@ public class DiggusMaximusClientMod implements ClientModInitializer {
 
             var config = ConfigHelper.getConfig();
             if (config.shapes.enableShapes && pressed) {
-                var selected = config.shapes.selectedShape.ordinal();
+                var shape = config.shapes.selectedShape;
                 if (Minecraft.getInstance().player != null && Minecraft.getInstance().player.isShiftKeyDown()) {
-                    selected--;
+                    shape = shape.prev();
                 } else {
-                    selected++;
+                    shape = shape.next();
                 }
-                var shapesCount = ExcavateTypes.Shape.values().length;
-                while (selected < 0 || selected >= shapesCount) {
-                    selected += shapesCount;
-                    selected %= shapesCount;
-                }
-                config.shapes.selectedShape = ExcavateTypes.Shape.values()[selected];
+                config.shapes.selectedShape = shape;
                 ConfigHelper.save();
-                Minecraft.getInstance().player.displayClientMessage(Component.translatable("diggusmaximus.shape." + ExcavateTypes.Shape.values()[selected].toString().toLowerCase(Locale.ROOT)), true);
+                Minecraft.getInstance().player.displayClientMessage(Component.translatable(shape.getName()), true);
             }
         });
 

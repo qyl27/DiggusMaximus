@@ -1,6 +1,5 @@
 package net.kyrptonaught.diggusmaximus.excavate;
 
-import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.kyrptonaught.diggusmaximus.bridge.PlayerEntityBridge;
 import net.kyrptonaught.diggusmaximus.config.ConfigHelper;
 import net.minecraft.core.BlockPos;
@@ -11,7 +10,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -32,9 +30,9 @@ public class Excavate {
     private final Deque<BlockPos> points = new ArrayDeque<>();
 
     private final Direction facing;
-    private int shapeSelection = -1;
+    private final Shape shape;
 
-    public Excavate(BlockPos pos, ResourceLocation startId, ServerPlayer player, Direction facing) {
+    public Excavate(BlockPos pos, ResourceLocation startId, ServerPlayer player, Shape shape, Direction facing) {
         this.startPos = pos;
         this.player = player;
         this.level = player.getCommandSenderWorld();
@@ -43,11 +41,11 @@ public class Excavate {
         this.startBlock = BuiltInRegistries.BLOCK.get(startId);
 
         this.startTool = player.getMainHandItem().getItem();
+        this.shape = shape;
         this.facing = facing;
     }
 
-    public void startExcavate(int shapeSelection) {
-        this.shapeSelection = shapeSelection;
+    public void startExcavate() {
         forceExcavateAt(startPos);
         if (startBlock.isEmpty()
                 || (startBlock.orElseThrow().is(startId) && ExcavateHelper.isBlockBlocked(startBlock.orElseThrow()))) {
@@ -62,7 +60,7 @@ public class Excavate {
     }
 
     private void spread(BlockPos pos) {
-        for (BlockPos dirPos : ExcavateTypes.getSpreadType(shapeSelection, facing, startPos, pos)) {
+        for (BlockPos dirPos : ExcavateTypes.getSpreadType(shape, facing, startPos, pos)) {
             if (ExcavateHelper.isValidPos(dirPos)) {
                 excavateAt(pos.offset(dirPos));
             }
@@ -75,7 +73,7 @@ public class Excavate {
         }
         var block = ExcavateHelper.getBlockAt(level, pos);
         if (!block.isAir()
-                && ExcavateHelper.isTheSameBlock(startBlock.orElseThrow(), block, shapeSelection)
+                && ExcavateHelper.isTheSameBlock(startBlock.orElseThrow(), block, shape)
                 && ExcavateHelper.canMine(player, startTool, level, startPos, pos)
                 && isExcavatingAllowed(pos)) {
             forceExcavateAt(pos);

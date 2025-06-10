@@ -61,12 +61,14 @@ public class ZhCnProvider extends FabricLanguageProvider {
         builder.add(buildAutoConfigKey("shapes", "includeDifBlocks"), "包含不同的方块");
         builder.add(buildAutoConfigKey("shapes", "selectedShape"), "当前选择的形状");
 
-        builder.add("diggusmaximus.shape.horizontal_layer", "水平层");
-        builder.add("diggusmaximus.shape.layer", "层");
-        builder.add("diggusmaximus.shape.hole", "洞");
-        builder.add("diggusmaximus.shape.one_by_two", "1x2");
-        builder.add("diggusmaximus.shape.one_by_two_tunnel", "1x2 隧道");
-        builder.add("diggusmaximus.shape.three_by_three", "3x3");
-        builder.add("diggusmaximus.shape.three_by_three_tunnel", "3x3 隧道");
+        builder.add(ModConstants.SHAPE_NONE, "无");
+
+        builder.add(ModConstants.SHAPE_HORIZONTAL_LAYER, "水平层");
+        builder.add(ModConstants.SHAPE_LAYER, "层");
+        builder.add(ModConstants.SHAPE_HOLE, "洞");
+        builder.add(ModConstants.SHAPE_ONE_BY_TWO, "1x2");
+        builder.add(ModConstants.SHAPE_ONE_BY_TWO_TUNNEL, "1x2 隧道");
+        builder.add(ModConstants.SHAPE_THREE_BY_THREE, "3x3");
+        builder.add(ModConstants.SHAPE_THREE_BY_THREE_TUNNEL, "3x3 隧道");
     }
 }

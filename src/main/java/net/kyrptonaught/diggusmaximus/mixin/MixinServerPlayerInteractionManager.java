@@ -2,7 +2,9 @@ package net.kyrptonaught.diggusmaximus.mixin;
 
 import net.kyrptonaught.diggusmaximus.excavate.Excavate;
 import net.kyrptonaught.diggusmaximus.config.ConfigHelper;
+import net.kyrptonaught.diggusmaximus.excavate.Shape;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -32,7 +34,7 @@ public class MixinServerPlayerInteractionManager {
             if (result) {
                 if (ConfigHelper.getConfig().config.sneakToExcavate && player.isShiftKeyDown()) {
                     if (pos.closerToCenterThan(player.position(), 10)) {
-                        new Excavate(pos, blockId, player, null).startExcavate(-1);
+                        new Excavate(pos, blockId, player, Shape.NONE, Direction.NORTH).startExcavate();
                     }
                 }
             }

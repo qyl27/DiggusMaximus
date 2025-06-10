@@ -8,19 +8,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 
 public class ExcavateTypes {
-    public enum Shape {
-        HORIZONTAL_LAYER, LAYER, HOLE,
-        ONE_BY_TWO, ONE_BY_TWO_TUNNEL,
-        THREE_BY_THREE, THREE_BY_THREE_TUNNEL
-    }
-
-    public static List<BlockPos> getSpreadType(int shapeSelection, Direction facing,
+    public static List<BlockPos> getSpreadType(Shape shape, Direction facing,
                                                BlockPos startPos, BlockPos curPos) {
-        if (shapeSelection == -1) {
-            return ConfigHelper.getConfig().config.mineDiag ? ExcavateTypes.standardDiag : ExcavateTypes.standard;
-        }
-
-        return switch (Shape.values()[shapeSelection]) {
+        return switch (shape) {
             case HOLE -> ExcavateTypes.hole(facing);
             case HORIZONTAL_LAYER -> ExcavateTypes.horizontalLayer();
             case LAYER -> ExcavateTypes.layers(facing);
@@ -28,6 +18,7 @@ public class ExcavateTypes {
             case ONE_BY_TWO_TUNNEL -> ExcavateTypes.oneByTwoTunnel(startPos, curPos, facing);
             case THREE_BY_THREE -> ExcavateTypes.threeByThree(startPos, curPos, facing);
             case THREE_BY_THREE_TUNNEL -> ExcavateTypes.threeByThreeTunnel(startPos, curPos, facing);
+            case NONE -> ConfigHelper.getConfig().config.mineDiag ? ExcavateTypes.standardDiag : ExcavateTypes.standard;
         };
     }
 
