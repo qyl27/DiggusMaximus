@@ -6,6 +6,7 @@ import net.kyrptonaught.diggusmaximus.config.ConfigHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Vec3i;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -15,6 +16,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import org.jetbrains.annotations.Nullable;
 
 public class ExcavateHelper {
     public static void pickupDrops(Level world, BlockPos pos, Player player) {
@@ -28,8 +30,8 @@ public class ExcavateHelper {
         });
     }
 
-    public static boolean isTheSameBlock(Holder.Reference<Block> original, BlockState newBlock, Shape shapeSelection) {
-        if (shapeSelection != Shape.NONE && ConfigHelper.getConfig().shapes.includeDifBlocks) {
+    public static boolean isTheSameBlock(Holder<Block> original, Holder<Block> newBlock, boolean hasShape) {
+        if (hasShape && ConfigHelper.getConfig().shapes.includeDifBlocks) {
             return true;
         }
 
@@ -53,10 +55,10 @@ public class ExcavateHelper {
             }
         }
 
-        return original.is(newBlock.getBlockHolder());
+        return original.is(newBlock);
     }
 
-    public static boolean isBlockBlocked(Holder.Reference<Block> block) {
+    public static boolean isBlockBlocked(Holder<Block> block) {
         var config = ConfigHelper.getConfig().blockList;
         if (config.isWhitelist) {
             for (var e : config.blocked) {
@@ -81,16 +83,25 @@ public class ExcavateHelper {
         return (Math.abs(pos.getX()) + Math.abs(pos.getY()) + Math.abs(pos.getZ())) != 0;
     }
 
-    public static BlockState getBlockAt(Level world, BlockPos pos) {
-        return world.getBlockState(pos);
+    public static @Nullable BlockState getBlockAt(Level level, BlockPos pos) {
+        if (level.isLoaded(pos)) {
+            return level.getBlockState(pos);
+        }
+        return null;
     }
 
     public static boolean canMine(Player player, Item tool, Level world, BlockPos startPos, BlockPos pos) {
-        return isWithinDistance(startPos, pos) && checkTool(player, tool) && isBreakableBlock(getBlockAt(world, pos).getBlock());
+        return isWithinDistance(startPos, pos) && checkTool(player, tool) && isBreakableBlock(getBlockAt(world, pos));
     }
 
-    private static boolean isBreakableBlock(Block block) {
-        return block.defaultDestroyTime() >= 0;
+    private static boolean isBreakableBlock(BlockState state) {
+        if (state == null) {
+            return false;
+        }
+        if (state.isAir()) {
+            return false;
+        }
+        return state.getBlock().defaultDestroyTime() >= 0;
     }
 
     private static boolean isWithinDistance(BlockPos startPos, BlockPos pos) {
@@ -127,5 +138,9 @@ public class ExcavateHelper {
         }
 
         return false;
+    }
+
+    public static boolean tryToExcavate(ServerPlayer player, BlockPos pos) {
+        return player.gameMode.destroyBlock(pos);
     }
 }
