@@ -5,6 +5,7 @@ import java.util.List;
 import net.kyrptonaught.diggusmaximus.config.ConfigHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.Vec3i;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -76,7 +77,7 @@ public class ExcavateHelper {
         }
     }
 
-    public static boolean isValidPos(BlockPos pos) {
+    public static boolean isValidOffset(Vec3i pos) {
         return (Math.abs(pos.getX()) + Math.abs(pos.getY()) + Math.abs(pos.getZ())) != 0;
     }
 

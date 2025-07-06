@@ -6,14 +6,10 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.kyrptonaught.diggusmaximus.config.ConfigHelper;
-import net.kyrptonaught.diggusmaximus.excavate.ExcavateTypes;
-import net.kyrptonaught.diggusmaximus.excavate.Shape;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import org.lwjgl.glfw.GLFW;
-
-import java.util.Locale;
 
 @Environment(EnvType.CLIENT)
 public class DiggusMaximusClientMod implements ClientModInitializer {

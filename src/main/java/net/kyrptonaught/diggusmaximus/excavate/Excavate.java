@@ -5,6 +5,7 @@ import net.kyrptonaught.diggusmaximus.config.ConfigHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
+import net.minecraft.core.Vec3i;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -60,9 +61,9 @@ public class Excavate {
     }
 
     private void spread(BlockPos pos) {
-        for (BlockPos dirPos : ExcavateTypes.getSpreadType(shape, facing, startPos, pos)) {
-            if (ExcavateHelper.isValidPos(dirPos)) {
-                excavateAt(pos.offset(dirPos));
+        for (Vec3i offset : ExcavateSpreadHelper.getSpreadShape(shape, facing, startPos, pos)) {
+            if (ExcavateHelper.isValidOffset(offset)) {
+                excavateAt(pos.offset(offset));
             }
         }
     }
