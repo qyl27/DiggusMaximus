@@ -22,7 +22,7 @@ public class ExcavateNetworking {
             server.execute(() -> {
                 if (ConfigHelper.getConfig().config.enabled) {
                     if (payload.pos().closerToCenterThan(player.position(), 10)) {
-                        new Excavate(payload.pos(), payload.id(), player, payload.shape(), payload.facing()).startExcavate();
+                        new Excavate(payload.pos(), payload.id(), player, payload.shape(), payload.hitFace()).startExcavate();
                     }
                 }
             });
@@ -30,7 +30,7 @@ public class ExcavateNetworking {
     }
 
     @Environment(EnvType.CLIENT)
-    public static void sendExcavatePacket(BlockPos pos, ResourceLocation id, Shape shape, Direction facing) {
-        ClientPlayNetworking.send(new ExcavatePacket(pos, id, shape, facing));
+    public static void sendExcavatePacket(BlockPos pos, ResourceLocation id, Shape shape, Direction hitFace) {
+        ClientPlayNetworking.send(new ExcavatePacket(pos, id, shape, hitFace));
     }
 }

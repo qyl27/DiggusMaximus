@@ -30,10 +30,11 @@ public class Excavate {
     private final Optional<Holder.Reference<Block>> startBlock;
     private final Deque<BlockPos> points = new ArrayDeque<>();
 
+    private final Direction hitFace;
     private final Direction facing;
     private final Shape shape;
 
-    public Excavate(BlockPos pos, ResourceLocation startId, ServerPlayer player, Shape shape, Direction facing) {
+    public Excavate(BlockPos pos, ResourceLocation startId, ServerPlayer player, Shape shape, Direction hitFace) {
         this.startPos = pos;
         this.player = player;
         this.level = player.getCommandSenderWorld();
@@ -43,7 +44,8 @@ public class Excavate {
 
         this.startTool = player.getMainHandItem().getItem();
         this.shape = shape;
-        this.facing = facing;
+        this.hitFace = hitFace;
+        this.facing = player.getNearestViewDirection();
     }
 
     public void startExcavate() {
@@ -61,7 +63,7 @@ public class Excavate {
     }
 
     private void spread(BlockPos pos) {
-        for (Vec3i offset : ExcavateSpreadHelper.getSpreadShape(shape, facing, startPos, pos)) {
+        for (Vec3i offset : ExcavateSpreadHelper.getSpreadShape(shape, hitFace, facing, startPos, pos)) {
             if (ExcavateHelper.isValidOffset(offset)) {
                 excavateAt(pos.offset(offset));
             }

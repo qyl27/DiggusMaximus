@@ -9,16 +9,16 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 
 public class ExcavateSpreadHelper {
-    public static List<Vec3i> getSpreadShape(Shape shape, Direction facing,
+    public static List<Vec3i> getSpreadShape(Shape shape, Direction hitFace, Direction playerHorizontalFacing,
                                              BlockPos startPos, BlockPos curPos) {
         return switch (shape) {
-            case HOLE -> ExcavateSpreadHelper.hole(facing);
+            case HOLE -> ExcavateSpreadHelper.hole(hitFace);
             case HORIZONTAL_LAYER -> ExcavateSpreadHelper.horizontalLayer();
-            case LAYER -> ExcavateSpreadHelper.layers(facing);
+            case LAYER -> ExcavateSpreadHelper.layers(hitFace);
             case ONE_BY_TWO -> ExcavateSpreadHelper.oneByTwo(startPos, curPos);
-            case ONE_BY_TWO_TUNNEL -> ExcavateSpreadHelper.oneByTwoTunnel(startPos, curPos, facing);
-            case THREE_BY_THREE -> ExcavateSpreadHelper.threeByThree(startPos, curPos, facing);
-            case THREE_BY_THREE_TUNNEL -> ExcavateSpreadHelper.threeByThreeTunnel(startPos, curPos, facing);
+            case ONE_BY_TWO_TUNNEL -> ExcavateSpreadHelper.oneByTwoTunnel(startPos, curPos, hitFace);
+            case THREE_BY_THREE -> ExcavateSpreadHelper.threeByThree(startPos, curPos, hitFace);
+            case THREE_BY_THREE_TUNNEL -> ExcavateSpreadHelper.threeByThreeTunnel(startPos, curPos, hitFace);
             case NONE ->
                     ConfigHelper.getConfig().config.mineDiag ? ExcavateSpreadHelper.standardDiag : ExcavateSpreadHelper.standard;
         };

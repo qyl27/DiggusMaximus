@@ -16,7 +16,6 @@ import net.minecraft.world.phys.HitResult;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -33,6 +32,11 @@ public abstract class MixinClientPlayerInteractionManager {
     private void beforeDestroyBlock(BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
         var config = ConfigHelper.getConfig();
         if (!config.config.enabled) {
+            return;
+        }
+
+        var player = minecraft.player;
+        if (player == null) {
             return;
         }
 

@@ -1,6 +1,5 @@
 package net.kyrptonaught.diggusmaximus.networking;
 
-import net.kyrptonaught.diggusmaximus.DiggusMaximusMod;
 import net.kyrptonaught.diggusmaximus.ModConstants;
 import net.kyrptonaught.diggusmaximus.excavate.Shape;
 import net.minecraft.core.BlockPos;
@@ -11,8 +10,8 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
-public record ExcavatePacket(BlockPos pos, ResourceLocation id, Shape shape, Direction facing) implements CustomPacketPayload {
-    public static final ResourceLocation IDENTIFIER = ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "start_excavate_packet");
+public record ExcavatePacket(BlockPos pos, ResourceLocation id, Shape shape, Direction hitFace) implements CustomPacketPayload {
+    public static final ResourceLocation IDENTIFIER = ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "excavate");
 
     public static final Type<ExcavatePacket> PACKET_ID = new Type<>(IDENTIFIER);
 
@@ -27,14 +26,14 @@ public record ExcavatePacket(BlockPos pos, ResourceLocation id, Shape shape, Dir
         var pos = buf.readBlockPos();
         var id = buf.readResourceLocation();
         var shape = buf.readEnum(Shape.class);
-        var facing = buf.readEnum(Direction.class);
-        return new ExcavatePacket(pos, id, shape, facing);
+        var hitFace = buf.readEnum(Direction.class);
+        return new ExcavatePacket(pos, id, shape, hitFace);
     }
 
     public static void write(FriendlyByteBuf buf, ExcavatePacket payload) {
         buf.writeBlockPos(payload.pos);
         buf.writeResourceLocation(payload.id);
         buf.writeEnum(payload.shape);
-        buf.writeEnum(payload.facing);
+        buf.writeEnum(payload.hitFace);
     }
 }

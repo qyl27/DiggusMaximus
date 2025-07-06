@@ -12,7 +12,7 @@ public class MixinPlayerEntity implements PlayerEntityBridge {
     private boolean diggus$isExcavating = false;
 
     @Override
-    public Boolean diggus$isExcavating() {
+    public boolean diggus$isExcavating() {
         return diggus$isExcavating;
     }
 
