@@ -15,8 +15,8 @@ public class ExcavateSpreadHelper {
             case HOLE -> ExcavateSpreadHelper.hole(hitFace);
             case HORIZONTAL_LAYER -> ExcavateSpreadHelper.horizontalLayer();
             case LAYER -> ExcavateSpreadHelper.layers(hitFace);
-            case ONE_BY_TWO -> ExcavateSpreadHelper.oneByTwo(startPos, curPos);
-            case ONE_BY_TWO_TUNNEL -> ExcavateSpreadHelper.oneByTwoTunnel(startPos, curPos, hitFace);
+            case ONE_BY_TWO -> ExcavateSpreadHelper.oneByTwo(startPos, curPos, hitFace);
+            case ONE_BY_TWO_TUNNEL -> ExcavateSpreadHelper.oneByTwoTunnel(startPos, curPos, hitFace, playerHorizontalFacing);
             case THREE_BY_THREE -> ExcavateSpreadHelper.threeByThree(startPos, curPos, hitFace);
             case THREE_BY_THREE_TUNNEL -> ExcavateSpreadHelper.threeByThreeTunnel(startPos, curPos, hitFace);
             case NONE ->
@@ -99,19 +99,25 @@ public class ExcavateSpreadHelper {
         return cube;
     }
 
-    private static List<Vec3i> oneByTwo(BlockPos startPos, BlockPos curPos) {
+    private static List<Vec3i> oneByTwo(BlockPos startPos, BlockPos curPos, Direction hitFace) {
         List<Vec3i> cube = new ArrayList<>();
         if (startPos.getY() == curPos.getY()) {
-            cube.add(new Vec3i(0, -1, 0));
+            if (hitFace == Direction.DOWN) {
+                cube.add(new Vec3i(0, 1, 0));
+            } else {
+                cube.add(new Vec3i(0, -1, 0));
+            }
         }
         return cube;
     }
 
-    private static List<Vec3i> oneByTwoTunnel(BlockPos startPos, BlockPos curPos, Direction facing) {
-        List<Vec3i> cube = hole(facing);
-        if (startPos.getY() == curPos.getY()) {
-            cube.add(new Vec3i(0, -1, 0));
+    private static List<Vec3i> oneByTwoTunnel(BlockPos startPos, BlockPos curPos, Direction hitFace, Direction playerFacing) {
+        var direction = hitFace;
+        if (hitFace.getAxis().isVertical()) {
+            direction = playerFacing.getOpposite();
         }
+        List<Vec3i> cube = hole(direction);
+        cube.addAll(oneByTwo(startPos, curPos, hitFace));
         return cube;
     }
 
