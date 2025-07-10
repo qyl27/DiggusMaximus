@@ -10,7 +10,7 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 @EventBusSubscriber(modid = ModConstants.MOD_ID)
 public class DiggusMaximusData {
     @SubscribeEvent
-    public void onInitializeDataGenerator(GatherDataEvent.Client event) {
+    public static void onInitializeDataGenerator(GatherDataEvent.Client event) {
         var generator = event.getGenerator();
         var output = generator.getPackOutput();
         generator.addProvider(true, new ZhCnProvider(output));
