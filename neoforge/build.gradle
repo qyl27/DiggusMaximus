@@ -40,3 +40,32 @@ remapJar {
     // Remap aw to at.
     atAccessWideners.add(loom.accessWidenerPath.get().asFile.name)
 }
+
+unifiedPublishing {
+    project {
+        displayName = "Diggus Maximus NeoForge ${rootProject.mod_version} for MC ${rootProject.minecraft_version}"
+        version = rootProject.version
+        gameVersions = [rootProject.minecraft_version]
+        gameLoaders = ['neoforge']
+        releaseType = 'release'
+
+        mainPublication tasks.remapJar
+
+        relations {
+            depends {
+                curseforge = 'cloth-config'
+                modrinth = 'cloth-config'
+            }
+        }
+
+        curseforge {
+            token = Objects.requireNonNullElse(System.getenv('CURSEFORGE_TOKEN'), "")
+            id = rootProject.curseforge_project_id
+        }
+
+        modrinth {
+            token = Objects.requireNonNullElse(System.getenv('MODRINTH_TOKEN'), "")
+            id = rootProject.modrinth_project_id
+        }
+    }
+}

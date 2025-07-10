@@ -4,6 +4,7 @@ plugins {
     id 'architectury-plugin' version "${architectury_plugin_version}"
     id 'dev.architectury.loom' version "${architectury_loom_version}"
     id 'com.gradleup.shadow' version "${shadow_plugin_version}" apply false
+    id 'me.shedaniel.unified-publishing' version "${unified_publishing_plugin_version}" apply false
 }
 
 base {
@@ -161,6 +162,7 @@ allprojects {
 
 subprojects {
     apply plugin: 'com.gradleup.shadow'
+    apply plugin: 'me.shedaniel.unified-publishing'
 
     base {
         archivesName = "$rootProject.archive_base_name-$project.name"
