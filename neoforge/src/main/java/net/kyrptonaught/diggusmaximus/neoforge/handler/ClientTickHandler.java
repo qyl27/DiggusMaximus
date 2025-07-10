@@ -11,7 +11,7 @@ import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 @EventBusSubscriber(modid = ModConstants.MOD_ID)
 public class ClientTickHandler {
     @SubscribeEvent
-    public static void onClientTick(ClientTickEvent event) {
+    public static void onClientTick(ClientTickEvent.Post event) {
         var mc = Minecraft.getInstance();
         DiggusMaximusClient.onClientTick(mc);
     }
