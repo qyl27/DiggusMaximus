@@ -7,11 +7,14 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 
 @Mod(ModConstants.MOD_ID)
 public class DiggusMaximusNeoForge {
     public DiggusMaximusNeoForge(ModContainer container, IEventBus bus) {
         bus.addListener(this::setupClient);
+
+        container.registerExtensionPoint(IConfigScreenFactory.class, (c, screen) -> ConfigHelper.getConfigScreen(screen));
 
         ConfigHelper.registerConfig();
         ModNetworking.registerPackets();
