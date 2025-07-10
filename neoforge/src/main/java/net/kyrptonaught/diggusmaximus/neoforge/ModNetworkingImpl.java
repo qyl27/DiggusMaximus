@@ -24,7 +24,7 @@ public class ModNetworkingImpl {
     @SubscribeEvent
     public static void onRegisterPacket(RegisterPayloadHandlersEvent event) {
         var registrar = event.registrar(ModConstants.NETWORK_PROTOCOL_VERSION);
-        registrar.playToServer(ExcavatePacket.PACKET_ID, ExcavatePacket.CODEC, (payload, context) -> {
+        registrar.optional().playToServer(ExcavatePacket.PACKET_ID, ExcavatePacket.CODEC, (payload, context) -> {
             if (context.player() instanceof ServerPlayer player) {
                 ExcavatePacket.handleServer(player, payload);
             }
