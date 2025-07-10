@@ -24,7 +24,9 @@ loom {
 
 dependencies {
     // In order to use the @Environment and @EnvironmentInterface annotations from fabric loader.
-    modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
+//    modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
+
+    modApi "me.shedaniel.cloth:cloth-config:${rootProject.cloth_config_version}"
 }
 
 sourceSets {
@@ -85,8 +87,6 @@ allprojects {
             officialMojangMappings()
             parchment("org.parchmentmc.data:parchment-${rootProject.parchment_minecraft_version}:${rootProject.parchment_version}@zip")
         }
-
-        modApi "me.shedaniel.cloth:cloth-config:${rootProject.cloth_config_version}"
 
         compileOnly "org.projectlombok:lombok:${project.lombok_version}"
         annotationProcessor "org.projectlombok:lombok:${project.lombok_version}"

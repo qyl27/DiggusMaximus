@@ -1,7 +1,5 @@
 package net.kyrptonaught.diggusmaximus.mixin;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.kyrptonaught.diggusmaximus.ModNetworking;
 import net.kyrptonaught.diggusmaximus.client.DiggusMaximusClient;
 import net.kyrptonaught.diggusmaximus.excavate.Shape;
@@ -20,7 +18,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Environment(EnvType.CLIENT)
 @Mixin(MultiPlayerGameMode.class)
 public abstract class MixinClientPlayerInteractionManager {
 
