@@ -18,4 +18,6 @@ public class ModConstants {
     public static final String SHAPE_THREE_BY_THREE_TUNNEL = "diggusmaximus.shape.3x3_tunnel";
 
     public static final String TITLE_CONFIG_SCREEN = "title.diggusmaximus.config";
+
+    public static final String NETWORK_PROTOCOL_VERSION = "2";
 }

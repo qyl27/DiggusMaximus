@@ -1,4 +1,4 @@
-package net.kyrptonaught.diggusmaximus.config.modmenu;
+package net.kyrptonaught.diggusmaximus.fabric.integration.modmenu;
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;

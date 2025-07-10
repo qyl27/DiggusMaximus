@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "diggusmaximus",
+  "id": "${mod_id}",
   "version": "${mod_version}",
   "name": "Diggus Maximus Reborn",
   "description": "Mine ores more better!",
@@ -16,28 +16,24 @@
   "icon": "assets/diggusmaximus/icon.png",
   "environment": "*",
   "mixins": [
-    {
-      "config": "diggusmaximus.mixins.json"
-    }
+    "diggusmaximus.mixins.json",
+    "diggusmaximus-fabric.mixins.json"
   ],
   "entrypoints": {
     "main": [
-      "net.kyrptonaught.diggusmaximus.DiggusMaximusMod"
+      "net.kyrptonaught.diggusmaximus.fabric.DiggusMaximusFabric"
     ],
     "client": [
-      "net.kyrptonaught.diggusmaximus.DiggusMaximusClientMod"
+      "net.kyrptonaught.diggusmaximus.fabric.client.DiggusMaximusClientFabric"
     ],
     "modmenu": [
-      "net.kyrptonaught.diggusmaximus.config.modmenu.ModMenuIntegration"
-    ],
-    "fabric-datagen": [
-      "net.kyrptonaught.diggusmaximus.data.DiggusMaximusData"
+      "net.kyrptonaught.diggusmaximus.fabric.integration.modmenu.ModMenuIntegration"
     ]
   },
   "depends": {
     "minecraft": "${minecraft_version_range}",
     "fabricloader": "${fabric_loader_version_range}",
     "fabric": "${fabric_api_version_range}",
-    "cloth-config": "${cloth_config_version_range}"
+    "cloth-config": "${fabric_cloth_config_version_range}"
   }
 }

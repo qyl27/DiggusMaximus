@@ -1,6 +1,8 @@
 package net.kyrptonaught.diggusmaximus.networking;
 
 import net.kyrptonaught.diggusmaximus.ModConstants;
+import net.kyrptonaught.diggusmaximus.config.ConfigHelper;
+import net.kyrptonaught.diggusmaximus.excavate.Excavate;
 import net.kyrptonaught.diggusmaximus.excavate.Shape;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -8,6 +10,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import org.jetbrains.annotations.NotNull;
 
 public record ExcavatePacket(BlockPos pos, ResourceLocation id, Shape shape, Direction hitFace) implements CustomPacketPayload {
@@ -35,5 +38,16 @@ public record ExcavatePacket(BlockPos pos, ResourceLocation id, Shape shape, Dir
         buf.writeResourceLocation(payload.id);
         buf.writeEnum(payload.shape);
         buf.writeEnum(payload.hitFace);
+    }
+
+    public static void handleServer(ServerPlayer player, ExcavatePacket packet) {
+        var server = player.server;
+        server.execute(() -> {
+            if (ConfigHelper.getConfig().config.enabled) {
+                if (packet.pos().closerToCenterThan(player.position(), 10)) {
+                    new Excavate(packet.pos(), packet.id(), player, packet.shape(), packet.hitFace()).startExcavate();
+                }
+            }
+        });
     }
 }

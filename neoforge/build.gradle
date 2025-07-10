@@ -1,0 +1,42 @@
+architectury {
+    platformSetupLoomIde()
+    neoForge()
+}
+
+loom {
+    runs {
+        clientData {
+            clientData()
+
+            runDir 'run/data/client'
+
+            programArgs '--all', '--mod', "${project.mod_id}"
+            programArgs '--output', file('../src/generated/resources').absolutePath
+            programArgs '--existing', file('../src/main/resources').absolutePath
+        }
+
+        serverData {
+            serverData()
+
+            runDir 'run/data/server'
+
+            programArgs '--all', '--mod', "${project.mod_id}"
+            programArgs '--output', file('../src/generated/resources').absolutePath
+            programArgs '--existing', file('../src/main/resources').absolutePath
+        }
+    }
+}
+
+dependencies {
+    neoForge "net.neoforged:neoforge:${rootProject.neoforge_version}"
+
+    modApi(include("me.shedaniel.cloth:cloth-config-neoforge:${rootProject.cloth_config_version}"))
+
+    common(project(path: ':', configuration: 'namedElements')) { transitive false }
+    shadowBundle project(path: ':', configuration: 'transformProductionNeoForge')
+}
+
+remapJar {
+    // Remap aw to at.
+    atAccessWideners.add(loom.accessWidenerPath.get().asFile.name)
+}

@@ -2,7 +2,8 @@ package net.kyrptonaught.diggusmaximus.mixin;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.kyrptonaught.diggusmaximus.DiggusMaximusClientMod;
+import net.kyrptonaught.diggusmaximus.ModNetworking;
+import net.kyrptonaught.diggusmaximus.client.DiggusMaximusClient;
 import net.kyrptonaught.diggusmaximus.excavate.Shape;
 import net.kyrptonaught.diggusmaximus.networking.ExcavateNetworking;
 import net.kyrptonaught.diggusmaximus.config.ConfigHelper;
@@ -41,21 +42,21 @@ public abstract class MixinClientPlayerInteractionManager {
         }
 
         {
-            var pressed = config.config.invertActivation ^ DiggusMaximusClientMod.EXCAVATE.isDown();
+            var pressed = config.config.invertActivation ^ DiggusMaximusClient.EXCAVATE.isDown();
             if (pressed) {
-                ExcavateNetworking.sendExcavatePacket(pos, BuiltInRegistries.BLOCK.getKey(minecraft.level.getBlockState(pos).getBlock()), Shape.NONE, Direction.NORTH);
+                ModNetworking.sendExcavatePacket(pos, BuiltInRegistries.BLOCK.getKey(minecraft.level.getBlockState(pos).getBlock()), Shape.NONE, Direction.NORTH);
                 return;
             }
         }
 
         if (config.shapes.enableShapes) {
-            var pressed = config.config.invertActivation ^ DiggusMaximusClientMod.SHAPED.isDown();
+            var pressed = config.config.invertActivation ^ DiggusMaximusClient.SHAPED.isDown();
             if (pressed) {
                 var shape = config.shapes.selectedShape;
                 var result = minecraft.player.pick(10, 0, false);
                 if (result.getType() == HitResult.Type.BLOCK) {
                     var facing = ((BlockHitResult) result).getDirection();
-                    ExcavateNetworking.sendExcavatePacket(pos, BuiltInRegistries.BLOCK.getKey(minecraft.level.getBlockState(pos).getBlock()), shape, facing);
+                    ModNetworking.sendExcavatePacket(pos, BuiltInRegistries.BLOCK.getKey(minecraft.level.getBlockState(pos).getBlock()), shape, facing);
                 }
             }
         }
