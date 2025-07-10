@@ -14,4 +14,12 @@ public class LangProviderHelper {
     public static String buildAutoConfigKey(String cateName, String fieldName) {
         return "text.autoconfig." + ModConstants.MOD_ID + ".option." + cateName + "." + fieldName;
     }
+
+    public static String buildAutoConfigKeyTooltip(String cateName, String fieldName) {
+        return "text.autoconfig." + ModConstants.MOD_ID + ".option." + cateName + "." + fieldName + ".@Tooltip";
+    }
+
+    public static String buildAutoConfigKeyTooltip(String cateName, String fieldName, int id) {
+        return "text.autoconfig." + ModConstants.MOD_ID + ".option." + cateName + "." + fieldName + ".@Tooltip[" + id + "]";
+    }
 }
