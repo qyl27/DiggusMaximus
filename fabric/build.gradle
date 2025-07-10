@@ -21,7 +21,7 @@ remapJar {
 }
 unifiedPublishing {
     project {
-        displayName = "Diggus Maximus Fabric ${rootProject.mod_version} for MC ${rootProject.minecraft_version}"
+        displayName = "(Fabric) ${rootProject.mod_version} for MC ${rootProject.minecraft_version}"
         version = rootProject.version
         gameVersions = [rootProject.minecraft_version]
         gameLoaders = ['fabric']
