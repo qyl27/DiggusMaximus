@@ -14,6 +14,6 @@ public class DiggusMaximusData {
         var generator = event.getGenerator();
         var output = generator.getPackOutput();
         generator.addProvider(true, new ZhCnProvider(output));
-        generator.addProvider(true, EnUsProvider::new);
+        generator.addProvider(true, new EnUsProvider(output));
     }
 }

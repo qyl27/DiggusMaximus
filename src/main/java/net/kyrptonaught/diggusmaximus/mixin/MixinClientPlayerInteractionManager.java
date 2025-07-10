@@ -5,7 +5,6 @@ import net.fabricmc.api.Environment;
 import net.kyrptonaught.diggusmaximus.ModNetworking;
 import net.kyrptonaught.diggusmaximus.client.DiggusMaximusClient;
 import net.kyrptonaught.diggusmaximus.excavate.Shape;
-import net.kyrptonaught.diggusmaximus.networking.ExcavateNetworking;
 import net.kyrptonaught.diggusmaximus.config.ConfigHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
