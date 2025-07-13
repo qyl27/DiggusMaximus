@@ -33,11 +33,17 @@ public class Excavate {
 
     private final Deque<BlockPos> points = new ArrayDeque<>();
 
+    private final Shape shape;
     private final Direction hitFace;
     private final Direction facing;
-    private final Shape shape;
+    private final boolean stopBeforeToolBroken;
+    private final boolean stopAfterToolBroken;
 
     public Excavate(BlockPos pos, ResourceLocation startId, ServerPlayer player, Shape shape, Direction hitFace) {
+        this(pos, startId, player, shape, hitFace, ConfigHelper.getConfig().common.stopBeforeToolBroken, ConfigHelper.getConfig().common.stopAfterToolBroken);
+    }
+
+    public Excavate(BlockPos pos, ResourceLocation startId, ServerPlayer player, Shape shape, Direction hitFace, boolean stopBeforeToolBroken, boolean stopAfterToolBroken) {
         this.startPos = pos;
         this.player = player;
         this.level = player.getCommandSenderWorld();
@@ -49,6 +55,9 @@ public class Excavate {
         this.shape = shape;
         this.hitFace = hitFace;
         this.facing = player.getNearestViewDirection();
+
+        this.stopBeforeToolBroken = stopBeforeToolBroken;
+        this.stopAfterToolBroken = stopAfterToolBroken;
     }
 
     public void startExcavate() {
@@ -80,13 +89,14 @@ public class Excavate {
     }
 
     private void excavateAt(BlockPos pos) {
-        if (mined >= ConfigHelper.getConfig().config.maxMinedBlocks) {
+        if (mined >= ConfigHelper.getConfig().common.maxMinedBlocks) {
             return;
         }
         var block = ExcavateHelper.getBlockAt(level, pos);
         if (block != null
                 && ExcavateHelper.isTheSameBlock(startBlockHolder, block.getBlockHolder(), shape != Shape.NONE)
-                && ExcavateHelper.canMine(player, startTool, level, startPos, pos)
+                && ExcavateHelper.canMine(level, startPos, pos)
+                && ExcavateHelper.checkTool(player, startTool, stopBeforeToolBroken, stopAfterToolBroken)
                 && ExcavateHelper.tryToExcavate(player, pos)) {
             forceExcavateAt(pos);
         }
@@ -95,7 +105,7 @@ public class Excavate {
     private void forceExcavateAt(BlockPos pos) {
         points.add(pos);
         mined++;
-        if (ConfigHelper.getConfig().config.autoPickup) {
+        if (ConfigHelper.getConfig().common.autoPickup) {
             ExcavateHelper.pickupDrops(level, pos, player);
         }
     }

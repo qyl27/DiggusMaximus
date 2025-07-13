@@ -20,7 +20,7 @@ public class ExcavateSpreadHelper {
             case THREE_BY_THREE -> ExcavateSpreadHelper.threeByThree(startPos, curPos, hitFace);
             case THREE_BY_THREE_TUNNEL -> ExcavateSpreadHelper.threeByThreeTunnel(startPos, curPos, hitFace);
             case NONE ->
-                    ConfigHelper.getConfig().config.mineDiag ? ExcavateSpreadHelper.standardDiag : ExcavateSpreadHelper.standard;
+                    ConfigHelper.getConfig().common.diagonallyMine ? ExcavateSpreadHelper.standardDiagonally : ExcavateSpreadHelper.standard;
         };
     }
 
@@ -122,7 +122,7 @@ public class ExcavateSpreadHelper {
     }
 
     private final static List<Vec3i> standard = new ArrayList<>();
-    private final static List<Vec3i> standardDiag = new ArrayList<>();
+    private final static List<Vec3i> standardDiagonally = new ArrayList<>();
 
     static {
         standard.add(new Vec3i(0, 1, 0));
@@ -132,32 +132,32 @@ public class ExcavateSpreadHelper {
         standard.add(new Vec3i(0, 0, -1));
         standard.add(new Vec3i(-1, 0, 0));
 
-        standardDiag.add(new Vec3i(-1, -1, -1));
-        standardDiag.add(new Vec3i(0, -1, -1));
-        standardDiag.add(new Vec3i(1, -1, -1));
-        standardDiag.add(new Vec3i(-1, 0, -1));
-        standardDiag.add(new Vec3i(0, 0, -1));
-        standardDiag.add(new Vec3i(1, 0, -1));
-        standardDiag.add(new Vec3i(-1, 1, -1));
-        standardDiag.add(new Vec3i(0, 1, -1));
-        standardDiag.add(new Vec3i(1, 1, -1));
-        standardDiag.add(new Vec3i(-1, -1, 0));
-        standardDiag.add(new Vec3i(0, -1, 0));
-        standardDiag.add(new Vec3i(1, -1, 0));
-        standardDiag.add(new Vec3i(-1, 0, 0));
-        standardDiag.add(new Vec3i(0, 0, 0));
-        standardDiag.add(new Vec3i(1, 0, 0));
-        standardDiag.add(new Vec3i(-1, 1, 0));
-        standardDiag.add(new Vec3i(0, 1, 0));
-        standardDiag.add(new Vec3i(1, 1, 0));
-        standardDiag.add(new Vec3i(-1, -1, 1));
-        standardDiag.add(new Vec3i(0, -1, 1));
-        standardDiag.add(new Vec3i(1, -1, 1));
-        standardDiag.add(new Vec3i(-1, 0, 1));
-        standardDiag.add(new Vec3i(0, 0, 1));
-        standardDiag.add(new Vec3i(1, 0, 1));
-        standardDiag.add(new Vec3i(-1, 1, 1));
-        standardDiag.add(new Vec3i(0, 1, 1));
-        standardDiag.add(new Vec3i(1, 1, 1));
+        standardDiagonally.add(new Vec3i(-1, -1, -1));
+        standardDiagonally.add(new Vec3i(0, -1, -1));
+        standardDiagonally.add(new Vec3i(1, -1, -1));
+        standardDiagonally.add(new Vec3i(-1, 0, -1));
+        standardDiagonally.add(new Vec3i(0, 0, -1));
+        standardDiagonally.add(new Vec3i(1, 0, -1));
+        standardDiagonally.add(new Vec3i(-1, 1, -1));
+        standardDiagonally.add(new Vec3i(0, 1, -1));
+        standardDiagonally.add(new Vec3i(1, 1, -1));
+        standardDiagonally.add(new Vec3i(-1, -1, 0));
+        standardDiagonally.add(new Vec3i(0, -1, 0));
+        standardDiagonally.add(new Vec3i(1, -1, 0));
+        standardDiagonally.add(new Vec3i(-1, 0, 0));
+        standardDiagonally.add(new Vec3i(0, 0, 0));
+        standardDiagonally.add(new Vec3i(1, 0, 0));
+        standardDiagonally.add(new Vec3i(-1, 1, 0));
+        standardDiagonally.add(new Vec3i(0, 1, 0));
+        standardDiagonally.add(new Vec3i(1, 1, 0));
+        standardDiagonally.add(new Vec3i(-1, -1, 1));
+        standardDiagonally.add(new Vec3i(0, -1, 1));
+        standardDiagonally.add(new Vec3i(1, -1, 1));
+        standardDiagonally.add(new Vec3i(-1, 0, 1));
+        standardDiagonally.add(new Vec3i(0, 0, 1));
+        standardDiagonally.add(new Vec3i(1, 0, 1));
+        standardDiagonally.add(new Vec3i(-1, 1, 1));
+        standardDiagonally.add(new Vec3i(0, 1, 1));
+        standardDiagonally.add(new Vec3i(1, 1, 1));
     }
 }

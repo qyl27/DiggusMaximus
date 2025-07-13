@@ -17,8 +17,8 @@ public class MixinBlock {
             player.causeFoodExhaustion(exhaustion);
             return;
         }
-        var options = ConfigHelper.getConfig().config;
-        if (!options.playerExhaustion) {
+        var options = ConfigHelper.getConfig().common;
+        if (!options.causePlayerExhaustion) {
             return;
         }
         player.causeFoodExhaustion(exhaustion * options.exhaustionMultiplier);

@@ -28,11 +28,11 @@ public class MixinServerPlayerInteractionManager {
 
     @Redirect(method = "destroyAndAck", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerPlayerGameMode;destroyBlock(Lnet/minecraft/core/BlockPos;)Z"))
     public boolean diggus$redirect$destroyAndAck$destroyBlock(ServerPlayerGameMode instance, BlockPos pos) {
-        if (ConfigHelper.getConfig().config.sneakToExcavate) {
+        if (ConfigHelper.getConfig().common.sneakToExcavate) {
             ResourceLocation blockId = BuiltInRegistries.BLOCK.getKey(level.getBlockState(pos).getBlock());
             boolean result = instance.destroyBlock(pos);
             if (result) {
-                if (ConfigHelper.getConfig().config.sneakToExcavate && player.isShiftKeyDown()) {
+                if (ConfigHelper.getConfig().common.sneakToExcavate && player.isShiftKeyDown()) {
                     if (pos.closerToCenterThan(player.position(), 10)) {
                         new Excavate(pos, blockId, player, Shape.NONE, Direction.NORTH).startExcavate();
                     }

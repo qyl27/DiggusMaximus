@@ -31,26 +31,24 @@ public class ExcavateHelper {
     }
 
     public static boolean isTheSameBlock(Holder<Block> original, Holder<Block> newBlock, boolean hasShape) {
-        if (hasShape && ConfigHelper.getConfig().shapes.includeDifBlocks) {
+        if (hasShape && ConfigHelper.getConfig().common.shapeIgnoreIdMismatch) {
             return true;
         }
 
-        if (ConfigHelper.getConfig().grouping.customGrouping) {
-            for (var g : ConfigHelper.getConfig().grouping.blockGroups) {
-                var originalWithIn = false;
+        for (var g : ConfigHelper.getConfig().common.blockGroups) {
+            var originalWithIn = false;
 
-                for (var e : g) {
-                    if (!originalWithIn) {
-                        var v = e.map(original::is, original::is);
-                        if (v) {
-                            originalWithIn = true;
-                        }
+            for (var e : g) {
+                if (!originalWithIn) {
+                    var v = e.map(original::is, original::is);
+                    if (v) {
+                        originalWithIn = true;
                     }
+                }
 
-                    var v = e.map(newBlock::is, newBlock::is);
-                    if (originalWithIn && v) {
-                        return true;
-                    }
+                var v = e.map(newBlock::is, newBlock::is);
+                if (originalWithIn && v) {
+                    return true;
                 }
             }
         }
@@ -59,8 +57,8 @@ public class ExcavateHelper {
     }
 
     public static boolean isBlockBlocked(Holder<Block> block) {
-        var config = ConfigHelper.getConfig().blockList;
-        if (config.isWhitelist) {
+        var config = ConfigHelper.getConfig().common;
+        if (config.asAllowlist) {
             for (var e : config.blocked) {
                 var r = e.map(block::is, block::is);
                 if (r) {
@@ -90,8 +88,8 @@ public class ExcavateHelper {
         return null;
     }
 
-    public static boolean canMine(Player player, Item tool, Level world, BlockPos startPos, BlockPos pos) {
-        return isWithinDistance(startPos, pos) && checkTool(player, tool) && isBreakableBlock(getBlockAt(world, pos));
+    public static boolean canMine(Level world, BlockPos startPos, BlockPos pos) {
+        return isWithinDistance(startPos, pos) && isBreakableBlock(getBlockAt(world, pos));
     }
 
     private static boolean isBreakableBlock(BlockState state) {
@@ -105,20 +103,20 @@ public class ExcavateHelper {
     }
 
     private static boolean isWithinDistance(BlockPos startPos, BlockPos pos) {
-        return pos.closerThan(startPos, ConfigHelper.getConfig().config.maxMineDistance + 1);
+        return pos.closerThan(startPos, ConfigHelper.getConfig().common.maxMineDistance + 1);
     }
 
-    private static boolean checkTool(Player player, Item tool) {
-        var config = ConfigHelper.getConfig().config;
+    public static boolean checkTool(Player player, Item tool, boolean stopBeforeToolBroken, boolean stopAfterToolBroken) {
+        var config = ConfigHelper.getConfig().common;
         if (player.isCreative()) {
             return true;
         }
         ItemStack heldItem = player.getMainHandItem();
-        if (config.dontBreakTool && heldItem.getDamageValue() + 1 == heldItem.getMaxDamage()) {
+        if (stopBeforeToolBroken && heldItem.getDamageValue() + 1 == heldItem.getMaxDamage()) {
             return false;
         }
         if (heldItem.getItem() != tool) {
-            if (config.stopOnToolBreak || config.requiresTool) {
+            if (stopAfterToolBroken || config.requiresTool) {
                 return false;
             }
         }
@@ -130,7 +128,7 @@ public class ExcavateHelper {
             return true;
         }
 
-        for (var e : ConfigHelper.getConfig().config.customTools) {
+        for (var e : ConfigHelper.getConfig().common.customTools) {
             var v = e.map(l -> stack.getItemHolder().is(l), stack::is);
             if (v) {
                 return true;

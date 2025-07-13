@@ -21,7 +21,7 @@ public class MixinCancelDurability {
                                     Consumer<Item> breakCallback, CallbackInfo ci) {
         if (player != null
                 && ((PlayerEntityBridge) player).diggus$isExcavating()
-                && !ConfigHelper.getConfig().config.toolDurability) {
+                && !ConfigHelper.getConfig().common.causeToolDamage) {
             ci.cancel();
         }
     }

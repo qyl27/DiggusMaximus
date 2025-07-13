@@ -4,6 +4,7 @@ import net.kyrptonaught.diggusmaximus.ModNetworking;
 import net.kyrptonaught.diggusmaximus.client.DiggusMaximusClient;
 import net.kyrptonaught.diggusmaximus.excavate.Shape;
 import net.kyrptonaught.diggusmaximus.config.ConfigHelper;
+import net.kyrptonaught.diggusmaximus.networking.ExcavatePacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.core.BlockPos;
@@ -28,7 +29,7 @@ public abstract class MixinClientPlayerInteractionManager {
     @Inject(method = "destroyBlock", at = @At(value = "HEAD"))
     private void beforeDestroyBlock(BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
         var config = ConfigHelper.getConfig();
-        if (!config.config.enabled) {
+        if (!config.common.enabled) {
             return;
         }
 
@@ -38,21 +39,23 @@ public abstract class MixinClientPlayerInteractionManager {
         }
 
         {
-            var pressed = config.config.invertActivation ^ DiggusMaximusClient.EXCAVATE.isDown();
+            var pressed = config.client.invertActivation ^ DiggusMaximusClient.EXCAVATE.isDown();
             if (pressed) {
-                ModNetworking.sendExcavatePacket(pos, BuiltInRegistries.BLOCK.getKey(minecraft.level.getBlockState(pos).getBlock()), Shape.NONE, Direction.NORTH);
+                var packet = new ExcavatePacket(pos, BuiltInRegistries.BLOCK.getKey(minecraft.level.getBlockState(pos).getBlock()), Shape.NONE, Direction.NORTH);
+                ModNetworking.sendExcavatePacket(packet);
                 return;
             }
         }
 
-        if (config.shapes.enableShapes) {
-            var pressed = config.config.invertActivation ^ DiggusMaximusClient.SHAPED.isDown();
+        {
+            var pressed = config.client.invertActivation ^ DiggusMaximusClient.SHAPED.isDown();
             if (pressed) {
-                var shape = config.shapes.selectedShape;
+                var shape = config.client.selectedShape;
                 var result = minecraft.player.pick(10, 0, false);
                 if (result.getType() == HitResult.Type.BLOCK) {
                     var facing = ((BlockHitResult) result).getDirection();
-                    ModNetworking.sendExcavatePacket(pos, BuiltInRegistries.BLOCK.getKey(minecraft.level.getBlockState(pos).getBlock()), shape, facing);
+                    var packet = new ExcavatePacket(pos, BuiltInRegistries.BLOCK.getKey(minecraft.level.getBlockState(pos).getBlock()), shape, facing);
+                    ModNetworking.sendExcavatePacket(packet);
                 }
             }
         }

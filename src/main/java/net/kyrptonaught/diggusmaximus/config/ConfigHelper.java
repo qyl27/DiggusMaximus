@@ -3,8 +3,8 @@ package net.kyrptonaught.diggusmaximus.config;
 import com.mojang.datafixers.util.Either;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigHolder;
-import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
 import me.shedaniel.autoconfig.serializer.PartitioningSerializer;
+import me.shedaniel.autoconfig.serializer.Toml4jConfigSerializer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.registries.Registries;
@@ -27,7 +27,7 @@ public class ConfigHelper {
     }
 
     public static void registerConfig() {
-        AutoConfig.register(ModConfig.class, PartitioningSerializer.wrap(JanksonConfigSerializer::new));
+        AutoConfig.register(ModConfig.class, PartitioningSerializer.wrap(Toml4jConfigSerializer::new));
     }
 
     private static ConfigHolder<ModConfig> holder;
@@ -36,9 +36,7 @@ public class ConfigHelper {
         if (holder == null) {
             holder = AutoConfig.getConfigHolder(ModConfig.class);
             holder.registerSaveListener((holder, config) -> {
-                config.blockList.update();
-                config.grouping.update();
-                config.config.update();
+                config.common.update();
                 return InteractionResult.SUCCESS;
             });
         }

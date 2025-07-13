@@ -19,14 +19,14 @@ public class DiggusMaximusClient {
         }
 
         var config = ConfigHelper.getConfig();
-        if (config.shapes.enableShapes && pressed) {
-            var shape = config.shapes.selectedShape;
+        if (pressed) {
+            var shape = config.client.selectedShape;
             if (mc.player != null && mc.player.isShiftKeyDown()) {
                 shape = shape.prev();
             } else {
                 shape = shape.next();
             }
-            config.shapes.selectedShape = shape;
+            config.client.selectedShape = shape;
             ConfigHelper.save();
             mc.player.displayClientMessage(Component.translatable(shape.getName()), true);
         }
