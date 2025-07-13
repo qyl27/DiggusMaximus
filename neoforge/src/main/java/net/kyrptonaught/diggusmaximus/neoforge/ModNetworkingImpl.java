@@ -6,13 +6,14 @@ import net.kyrptonaught.diggusmaximus.networking.ExcavatePacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 
 @EventBusSubscriber(modid = ModConstants.MOD_ID)
 public class ModNetworkingImpl {
     public static void sendExcavatePacket(ExcavatePacket packet) {
-        PacketDistributor.sendToServer(packet);
+        ClientPacketDistributor.sendToServer(packet);
     }
 
     public static void sendFailedPacket(ServerPlayer player, ExcavateFailedPacket packet) {
