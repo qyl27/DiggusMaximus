@@ -46,7 +46,7 @@ public class Excavate {
     public Excavate(BlockPos pos, ResourceLocation startId, ServerPlayer player, Shape shape, Direction hitFace, boolean stopBeforeToolBroken, boolean stopAfterToolBroken) {
         this.startPos = pos;
         this.player = player;
-        this.level = player.getCommandSenderWorld();
+        this.level = player.level();
         this.startId = ResourceKey.create(Registries.BLOCK, startId);
 
         this.startBlock = ExcavateHelper.getBlockAt(level, pos);
