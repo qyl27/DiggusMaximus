@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Vec3i;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -22,7 +23,7 @@ import java.util.Deque;
 public class Excavate {
     private final BlockPos startPos;
     private final ServerPlayer player;
-    private ResourceKey<Block> startId;
+    private final ResourceKey<Block> startId;
     private final Item startTool;
     private int mined = 0;
     private final Level level;
@@ -63,14 +64,16 @@ public class Excavate {
     public void startExcavate() {
         forceExcavateAt(startPos);
 
-        if (startBlock == null) {
-            return;
-        }
-
-        startBlockHolder = startBlock.getBlockHolder();
-        if (startBlock.is(startId) && ExcavateHelper.isBlockBlocked(startBlockHolder)) {
-            // Todo: handle client block mismatch correctly
-            return;
+        if (startBlock == null || startBlock.isAir()) {
+            var holder = BuiltInRegistries.BLOCK.get(startId);
+            if (holder.isEmpty()) {
+                // em, we have no way to determine the id :(
+                // Fixme: incorrect capture or bad race?
+                return;
+            }
+            startBlockHolder = holder.get();
+        } else {
+            startBlockHolder = startBlock.getBlockHolder();
         }
 
         ((PlayerEntityBridge) player).diggus$setExcavating(true);
