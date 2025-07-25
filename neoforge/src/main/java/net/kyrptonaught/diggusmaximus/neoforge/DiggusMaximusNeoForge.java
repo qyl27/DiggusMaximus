@@ -11,7 +11,11 @@ import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 
 @Mod(ModConstants.MOD_ID)
 public class DiggusMaximusNeoForge {
+    private final ModContainer container;
+
     public DiggusMaximusNeoForge(ModContainer container, IEventBus bus) {
+        this.container = container;
+
         bus.addListener(this::setupClient);
 
         ConfigHelper.registerConfig();
@@ -19,6 +23,6 @@ public class DiggusMaximusNeoForge {
     }
 
     private void setupClient(FMLClientSetupEvent event) {
-        event.getContainer().registerExtensionPoint(IConfigScreenFactory.class, (c, screen) -> ConfigHelper.getConfigScreen(screen));
+        container.registerExtensionPoint(IConfigScreenFactory.class, (c, screen) -> ConfigHelper.getConfigScreen(screen));
     }
 }
