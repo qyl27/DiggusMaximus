@@ -14,12 +14,11 @@ public class DiggusMaximusNeoForge {
     public DiggusMaximusNeoForge(ModContainer container, IEventBus bus) {
         bus.addListener(this::setupClient);
 
-        container.registerExtensionPoint(IConfigScreenFactory.class, (c, screen) -> ConfigHelper.getConfigScreen(screen));
-
         ConfigHelper.registerConfig();
         ModNetworking.registerPackets();
     }
 
     private void setupClient(FMLClientSetupEvent event) {
+        event.getContainer().registerExtensionPoint(IConfigScreenFactory.class, (c, screen) -> ConfigHelper.getConfigScreen(screen));
     }
 }
