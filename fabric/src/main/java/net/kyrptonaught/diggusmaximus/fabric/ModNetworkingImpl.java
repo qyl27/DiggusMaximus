@@ -1,15 +1,17 @@
 package net.kyrptonaught.diggusmaximus.fabric;
 
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.fabricmc.loader.api.FabricLoader;
+import net.kyrptonaught.diggusmaximus.fabric.client.ModNetworkingClient;
 import net.kyrptonaught.diggusmaximus.networking.ExcavateFailedPacket;
 import net.kyrptonaught.diggusmaximus.networking.ExcavatePacket;
 import net.minecraft.server.level.ServerPlayer;
 
 public class ModNetworkingImpl {
     public static void sendExcavatePacket(ExcavatePacket packet) {
-        ClientPlayNetworking.send(packet);
+        ModNetworkingClient.sendExcavatePacket(packet);
     }
 
     public static void sendFailedPacket(ServerPlayer player, ExcavateFailedPacket packet) {
@@ -24,8 +26,8 @@ public class ModNetworkingImpl {
             ExcavatePacket.handleServer(context.player(), payload);
         });
 
-        ClientPlayNetworking.registerGlobalReceiver(ExcavateFailedPacket.TYPE, (payload, context) -> {
-            ExcavateFailedPacket.handleClient(context.player(), payload);
-        });
+        if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
+            ModNetworkingClient.registerPacket();
+        }
     }
 }

@@ -26,7 +26,7 @@ public abstract class MixinClientPlayerInteractionManager {
     @Final
     private Minecraft minecraft;
 
-    @Inject(method = "destroyBlock", at = @At(value = "HEAD"), cancellable = true)
+    @Inject(method = "destroyBlock", at = @At(value = "HEAD"))
     private void beforeDestroyBlock(BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
         var config = ConfigHelper.getConfig();
         if (!config.common.enabled) {
