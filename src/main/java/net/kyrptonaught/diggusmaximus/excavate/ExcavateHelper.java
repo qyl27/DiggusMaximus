@@ -35,25 +35,17 @@ public class ExcavateHelper {
             return true;
         }
 
-        for (var g : ConfigHelper.getConfig().common.blockGroups) {
-            var originalWithIn = false;
-
-            for (var e : g) {
-                if (!originalWithIn) {
-                    var v = e.map(original::is, original::is);
-                    if (v) {
-                        originalWithIn = true;
-                    }
-                }
-
-                var v = e.map(newBlock::is, newBlock::is);
-                if (originalWithIn && v) {
-                    return true;
-                }
-            }
+        if (original.is(newBlock)) {
+            return true;
         }
 
-        return original.is(newBlock);
+        for (var g : ConfigHelper.getConfig().common.blockGroups) {
+            var originalWithIn = g.stream().anyMatch(e -> e.map(original::is, original::is));
+            var consideringWithIn = g.stream().anyMatch(e -> e.map(newBlock::is, newBlock::is));
+            return originalWithIn && consideringWithIn;
+        }
+
+        return false;
     }
 
     public static boolean isBlockDisallowed(Holder<Block> block) {
