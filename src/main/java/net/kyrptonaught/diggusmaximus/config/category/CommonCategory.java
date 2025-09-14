@@ -71,7 +71,7 @@ public class CommonCategory implements ConfigData {
     // region Excluded fields
 
     @ConfigEntry.Gui.Excluded
-    public final Set<Either<ResourceKey<Item>, TagKey<Item>>> customTools = new HashSet<>();
+    public transient final Set<Either<ResourceKey<Item>, TagKey<Item>>> customTools = new HashSet<>();
 
     @ConfigEntry.Gui.Excluded
     public transient final List<Set<Either<ResourceKey<Block>, TagKey<Block>>>> blockGroups = new ArrayList<>();
