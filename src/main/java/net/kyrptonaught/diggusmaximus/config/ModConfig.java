@@ -15,4 +15,8 @@ public class ModConfig extends PartitioningSerializer.GlobalData {
     @ConfigEntry.Category("client")
     @ConfigEntry.Gui.TransitiveObject
     public ClientCategory client = new ClientCategory();
+
+    public void update() {
+        common.update();
+    }
 }

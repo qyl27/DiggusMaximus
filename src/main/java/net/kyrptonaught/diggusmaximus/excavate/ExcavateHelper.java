@@ -35,46 +35,28 @@ public class ExcavateHelper {
             return true;
         }
 
-        for (var g : ConfigHelper.getConfig().common.blockGroups) {
-            var originalWithIn = false;
-
-            for (var e : g) {
-                if (!originalWithIn) {
-                    var v = e.map(original::is, original::is);
-                    if (v) {
-                        originalWithIn = true;
-                    }
-                }
-
-                var v = e.map(newBlock::is, newBlock::is);
-                if (originalWithIn && v) {
-                    return true;
-                }
-            }
+        if (original.is(newBlock)) {
+            return true;
         }
 
-        return original.is(newBlock);
+        for (var g : ConfigHelper.getConfig().common.blockGroups) {
+            var originalWithIn = g.stream().anyMatch(e -> e.map(original::is, original::is));
+            var consideringWithIn = g.stream().anyMatch(e -> e.map(newBlock::is, newBlock::is));
+            return originalWithIn && consideringWithIn;
+        }
+
+        return false;
     }
 
-    public static boolean isBlockBlocked(Holder<Block> block) {
+    public static boolean isBlockDisallowed(Holder<Block> block) {
         var config = ConfigHelper.getConfig().common;
-        if (config.asAllowlist) {
-            for (var e : config.blocked) {
-                var r = e.map(block::is, block::is);
-                if (r) {
-                    return false;
-                }
+        for (var e : config.blocked) {
+            var r = e.map(block::is, block::is);
+            if (r) {
+                return !config.asAllowlist;
             }
-            return true;
-        } else {
-            for (var e : config.blocked) {
-                var r = e.map(block::is, block::is);
-                if (r) {
-                    return true;
-                }
-            }
-            return false;
         }
+        return config.asAllowlist;
     }
 
     public static boolean isValidOffset(Vec3i pos) {
