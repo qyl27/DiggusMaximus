@@ -1,5 +1,6 @@
 package net.kyrptonaught.diggusmaximus.excavate;
 
+import net.kyrptonaught.diggusmaximus.ModPlatformEvents;
 import net.kyrptonaught.diggusmaximus.bridge.PlayerEntityBridge;
 import net.kyrptonaught.diggusmaximus.config.ConfigHelper;
 import net.minecraft.core.BlockPos;
@@ -100,6 +101,8 @@ public class Excavate {
                 && ExcavateHelper.isTheSameBlock(startBlockHolder, block.getBlockHolder(), shape != Shape.NONE)
                 && ExcavateHelper.canMine(level, startPos, pos)
                 && ExcavateHelper.checkTool(player, startTool, stopBeforeToolBroken, stopAfterToolBroken)
+                && !ExcavateHelper.isBlockDisallowed(block.getBlockHolder())
+                && ModPlatformEvents.beforePlayerBreakBlock(level, player, block, pos)
                 && ExcavateHelper.tryToExcavate(player, pos)) {
             forceExcavateAt(pos);
         }
