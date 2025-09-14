@@ -100,7 +100,7 @@ public class Excavate {
                 && ExcavateHelper.isTheSameBlock(startBlockHolder, block.getBlockHolder(), shape != Shape.NONE)
                 && ExcavateHelper.canMine(level, startPos, pos)
                 && ExcavateHelper.checkTool(player, startTool, stopBeforeToolBroken, stopAfterToolBroken)
-                && !ExcavateHelper.isBlockBlocked(block.getBlockHolder())
+                && !ExcavateHelper.isBlockDisallowed(block.getBlockHolder())
                 && ExcavateHelper.tryToExcavate(player, pos)) {
             forceExcavateAt(pos);
         }

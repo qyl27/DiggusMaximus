@@ -56,25 +56,15 @@ public class ExcavateHelper {
         return original.is(newBlock);
     }
 
-    public static boolean isBlockBlocked(Holder<Block> block) {
+    public static boolean isBlockDisallowed(Holder<Block> block) {
         var config = ConfigHelper.getConfig().common;
-        if (config.asAllowlist) {
-            for (var e : config.blocked) {
-                var r = e.map(block::is, block::is);
-                if (r) {
-                    return false;
-                }
+        for (var e : config.blocked) {
+            var r = e.map(block::is, block::is);
+            if (r) {
+                return !config.asAllowlist;
             }
-            return true;
-        } else {
-            for (var e : config.blocked) {
-                var r = e.map(block::is, block::is);
-                if (r) {
-                    return true;
-                }
-            }
-            return false;
         }
+        return config.asAllowlist;
     }
 
     public static boolean isValidOffset(Vec3i pos) {
