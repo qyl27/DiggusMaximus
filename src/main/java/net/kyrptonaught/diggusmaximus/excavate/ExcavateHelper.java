@@ -30,6 +30,7 @@ public class ExcavateHelper {
         });
     }
 
+    @SuppressWarnings("deprecation")
     public static boolean isTheSameBlock(Holder<Block> original, Holder<Block> newBlock, boolean hasShape) {
         if (hasShape && ConfigHelper.getConfig().common.shapeIgnoreIdMismatch) {
             return true;

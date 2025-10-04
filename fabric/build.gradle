@@ -39,6 +39,11 @@ unifiedPublishing {
                 curseforge = 'cloth-config'
                 modrinth = 'cloth-config'
             }
+
+            optional {
+                curseforge = 'modmenu'
+                modrinth = 'modmenu'
+            }
         }
 
         curseforge {

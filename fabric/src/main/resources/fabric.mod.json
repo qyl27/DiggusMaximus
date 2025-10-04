@@ -35,5 +35,8 @@
     "fabricloader": "${fabric_loader_version_range}",
     "fabric": "${fabric_api_version_range}",
     "cloth-config": "${fabric_cloth_config_version_range}"
+  },
+  "suggests": {
+    "modmenu": "${fabric_mod_menu_version_range}"
   }
 }

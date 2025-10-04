@@ -136,7 +136,8 @@ allprojects {
                 fabric_minecraft_version_range     : rootProject.fabric_minecraft_version_range,
                 fabric_loader_version_range        : rootProject.fabric_loader_version_range,
                 fabric_api_version_range           : rootProject.fabric_api_version_range,
-                fabric_cloth_config_version_range  : rootProject.fabric_cloth_config_version_range
+                fabric_cloth_config_version_range  : rootProject.fabric_cloth_config_version_range,
+                fabric_mod_menu_version_range      : rootProject.fabric_mod_menu_version_range
         ]
 
         inputs.properties replaceTokens
