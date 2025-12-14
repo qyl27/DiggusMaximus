@@ -2,6 +2,7 @@ package net.kyrptonaught.diggusmaximus.neoforge;
 
 import net.kyrptonaught.diggusmaximus.ModConstants;
 import net.kyrptonaught.diggusmaximus.ModNetworking;
+import net.kyrptonaught.diggusmaximus.client.ConfigClientHelper;
 import net.kyrptonaught.diggusmaximus.config.ConfigHelper;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -19,6 +20,6 @@ public class DiggusMaximusNeoForge {
     }
 
     private void setupClient(FMLClientSetupEvent event) {
-        event.getContainer().registerExtensionPoint(IConfigScreenFactory.class, (c, screen) -> ConfigHelper.getConfigScreen(screen));
+        event.getContainer().registerExtensionPoint(IConfigScreenFactory.class, (c, screen) -> ConfigClientHelper.getConfigScreen(screen));
     }
 }

@@ -1,20 +1,11 @@
 package net.kyrptonaught.diggusmaximus.config;
 
-import com.mojang.datafixers.util.Either;
 import lombok.SneakyThrows;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigHolder;
 import me.shedaniel.autoconfig.serializer.PartitioningSerializer;
 import me.shedaniel.autoconfig.serializer.Toml4jConfigSerializer;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.Identifier;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,16 +14,6 @@ import java.nio.file.Path;
 
 public class ConfigHelper {
     private static final Logger LOGGER = LoggerFactory.getLogger(ConfigHelper.class);
-
-    public static Screen getConfigScreen(Screen parent) {
-        return AutoConfig.getConfigScreen(ModConfig.class, parent).get();
-    }
-
-    public static void showConfigScreen(Minecraft mc) {
-        var parent = mc.screen;
-        var screen = getConfigScreen(parent);
-        mc.setScreen(screen);
-    }
 
     public static void registerConfig() {
         registerConfig(true);
@@ -80,29 +61,5 @@ public class ConfigHelper {
 
     public static void save() {
         getHolder().save();
-    }
-
-    public static Either<ResourceKey<Block>, TagKey<Block>> parseBlockOrTag(String s) {
-        if (s.startsWith("#")) {
-            var rl = Identifier.parse(s.substring(1));
-            var key = TagKey.create(Registries.BLOCK, rl);
-            return Either.right(key);
-        } else {
-            var rl = Identifier.parse(s);
-            var rk = ResourceKey.create(Registries.BLOCK, rl);
-            return Either.left(rk);
-        }
-    }
-
-    public static Either<ResourceKey<Item>, TagKey<Item>> parseItemOrTag(String s) {
-        if (s.startsWith("#")) {
-            var rl = Identifier.parse(s.substring(1));
-            var key = TagKey.create(Registries.ITEM, rl);
-            return Either.right(key);
-        } else {
-            var rl = Identifier.parse(s);
-            var rk = ResourceKey.create(Registries.ITEM, rl);
-            return Either.left(rk);
-        }
     }
 }
