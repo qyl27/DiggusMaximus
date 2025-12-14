@@ -50,6 +50,8 @@ public class ZhCnProvider extends LanguageProvider {
         add(buildAutoConfigKeyTooltip("common", "blocklistedBlocks"), "支持ID和Tag");
         add(buildAutoConfigKey("common", "asAllowlist"), "换用白名单模式");
         add(buildAutoConfigKeyTooltip("common", "asAllowlist"), "即变为“允许连锁列表”");
+        add(buildAutoConfigKey("common", "matchBlockState"), "不挖掘ID相同但方块状态不同的方块（例如：不同成熟程度的作物）");
+        add(buildAutoConfigKeyTooltip("common", "matchBlockState"), "支持ID和Tag");
 
         add(buildAutoConfigCategory("client"), "客户端设置");
         add(buildAutoConfigKey("client", "invertActivation"), "反向激活");

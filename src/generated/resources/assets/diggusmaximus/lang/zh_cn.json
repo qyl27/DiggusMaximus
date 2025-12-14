@@ -37,6 +37,8 @@
   "text.autoconfig.diggusmaximus.option.common.exhaustionMultiplier": "饱食度消耗倍率",
   "text.autoconfig.diggusmaximus.option.common.groups": "自定义方块组别（在同一组中的视为同种方块）",
   "text.autoconfig.diggusmaximus.option.common.groups.@Tooltip": "一行一组，使用英文逗号\",\"分隔，支持ID和Tag",
+  "text.autoconfig.diggusmaximus.option.common.matchBlockState": "不挖掘ID相同但方块状态不同的方块（例如：不同成熟程度的作物）",
+  "text.autoconfig.diggusmaximus.option.common.matchBlockState.@Tooltip": "支持ID和Tag",
   "text.autoconfig.diggusmaximus.option.common.maxMineDistance": "最远连锁距离",
   "text.autoconfig.diggusmaximus.option.common.maxMineDistance.@Tooltip": "从玩家当前位置到被挖掘的方块位置",
   "text.autoconfig.diggusmaximus.option.common.maxMinedBlocks": "单次最大挖掘方块数",

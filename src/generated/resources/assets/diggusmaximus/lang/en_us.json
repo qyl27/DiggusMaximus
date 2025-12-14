@@ -37,6 +37,8 @@
   "text.autoconfig.diggusmaximus.option.common.exhaustionMultiplier": "Exhaustion Multiplier",
   "text.autoconfig.diggusmaximus.option.common.groups": "Custom Block Groups (blocks in same group are treated as a same block)",
   "text.autoconfig.diggusmaximus.option.common.groups.@Tooltip": "One group per line, use commas to separate. Supports IDs and Tags",
+  "text.autoconfig.diggusmaximus.option.common.matchBlockState": "Don't mine blocks with same id but different state (e.g. you want to mine only matured crops)",
+  "text.autoconfig.diggusmaximus.option.common.matchBlockState.@Tooltip": "Supports IDs and Tags",
   "text.autoconfig.diggusmaximus.option.common.maxMineDistance": "Max Excavation Distance",
   "text.autoconfig.diggusmaximus.option.common.maxMineDistance.@Tooltip": "Distance from player to the block being excavated",
   "text.autoconfig.diggusmaximus.option.common.maxMinedBlocks": "Max Mined Blocks per Excavation",

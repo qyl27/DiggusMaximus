@@ -50,6 +50,8 @@ public class EnUsProvider extends LanguageProvider {
         add(buildAutoConfigKeyTooltip("common", "blocklistedBlocks"), "Supports IDs and Tags");
         add(buildAutoConfigKey("common", "asAllowlist"), "Use Allowlist Mode");
         add(buildAutoConfigKeyTooltip("common", "asAllowlist"), "Changes to an ‘allowed blocks’ list");
+        add(buildAutoConfigKey("common", "matchBlockState"), "Don't mine blocks with same id but different state (e.g. you want to mine only matured crops)");
+        add(buildAutoConfigKeyTooltip("common", "matchBlockState"), "Supports IDs and Tags");
 
         add(buildAutoConfigCategory("client"), "Client");
         add(buildAutoConfigKey("client", "invertActivation"), "Invert Activation");

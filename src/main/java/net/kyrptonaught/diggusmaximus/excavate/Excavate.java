@@ -96,13 +96,9 @@ public class Excavate {
         if (mined >= ConfigHelper.getConfig().common.maxMinedBlocks) {
             return;
         }
-        var block = ExcavateHelper.getBlockAt(level, pos);
-        if (block != null
-                && ExcavateHelper.isTheSameBlock(startBlockHolder, block.getBlockHolder(), shape != Shape.NONE)
-                && ExcavateHelper.canMine(level, startPos, pos)
-                && ExcavateHelper.checkTool(player, startTool, stopBeforeToolBroken, stopAfterToolBroken)
-                && !ExcavateHelper.isBlockDisallowed(block.getBlockHolder())
-                && ModPlatformEvents.beforePlayerBreakBlock(level, player, block, pos)
+
+        if (ExcavateHelper.isValid(level, startBlock, startPos, startBlockHolder, pos,
+                player, startTool, shape != Shape.NONE, stopBeforeToolBroken, stopAfterToolBroken)
                 && ExcavateHelper.tryToExcavate(player, pos)) {
             forceExcavateAt(pos);
         }

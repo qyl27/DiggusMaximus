@@ -1,13 +1,9 @@
 package net.kyrptonaught.diggusmaximus.config.category;
 
-import com.mojang.datafixers.util.Either;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
-import net.kyrptonaught.diggusmaximus.config.ConfigHelper;
 import net.kyrptonaught.diggusmaximus.config.IdOrTag;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 
@@ -69,6 +65,9 @@ public class CommonCategory implements ConfigData {
     @ConfigEntry.Gui.Tooltip
     public List<String> blocklistedBlocks = new ArrayList<>();
 
+    @ConfigEntry.Gui.Tooltip
+    public List<String> matchBlockState = new ArrayList<>();
+
     // region Excluded fields
 
     @ConfigEntry.Gui.Excluded
@@ -80,7 +79,15 @@ public class CommonCategory implements ConfigData {
     @ConfigEntry.Gui.Excluded
     public transient final Set<IdOrTag<Block>> blocked = new HashSet<>();
 
+    @ConfigEntry.Gui.Excluded
+    public transient final Set<IdOrTag<Block>> matchState = new HashSet<>();
+
     // endregion
+
+    public CommonCategory() {
+        // Default values
+        matchBlockState.add("#minecraft:crops");
+    }
 
     @Override
     public void validatePostLoad() throws ConfigData.ValidationException {
@@ -95,6 +102,7 @@ public class CommonCategory implements ConfigData {
         customTools.clear();
         blockGroups.clear();
         blocked.clear();
+        matchState.clear();
 
         for (var s : tools) {
             customTools.add(IdOrTag.itemFrom(s));
@@ -110,6 +118,10 @@ public class CommonCategory implements ConfigData {
 
         for (var s : blocklistedBlocks) {
             blocked.add(IdOrTag.blockFrom(s));
+        }
+
+        for (var s : matchBlockState) {
+            matchState.add(IdOrTag.blockFrom(s));
         }
     }
 }
