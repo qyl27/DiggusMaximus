@@ -9,8 +9,8 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
@@ -41,11 +41,11 @@ public class Excavate {
     private final boolean stopBeforeToolBroken;
     private final boolean stopAfterToolBroken;
 
-    public Excavate(BlockPos pos, ResourceLocation startId, ServerPlayer player, Shape shape, Direction hitFace) {
+    public Excavate(BlockPos pos, Identifier startId, ServerPlayer player, Shape shape, Direction hitFace) {
         this(pos, startId, player, shape, hitFace, ConfigHelper.getConfig().common.stopBeforeToolBroken, ConfigHelper.getConfig().common.stopAfterToolBroken);
     }
 
-    public Excavate(BlockPos pos, ResourceLocation startId, ServerPlayer player, Shape shape, Direction hitFace, boolean stopBeforeToolBroken, boolean stopAfterToolBroken) {
+    public Excavate(BlockPos pos, Identifier startId, ServerPlayer player, Shape shape, Direction hitFace, boolean stopBeforeToolBroken, boolean stopAfterToolBroken) {
         this.startPos = pos;
         this.player = player;
         this.level = player.level();

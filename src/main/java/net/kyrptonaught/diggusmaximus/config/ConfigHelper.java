@@ -9,8 +9,8 @@ import me.shedaniel.autoconfig.serializer.Toml4jConfigSerializer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.Item;
@@ -84,11 +84,11 @@ public class ConfigHelper {
 
     public static Either<ResourceKey<Block>, TagKey<Block>> parseBlockOrTag(String s) {
         if (s.startsWith("#")) {
-            var rl = ResourceLocation.parse(s.substring(1));
+            var rl = Identifier.parse(s.substring(1));
             var key = TagKey.create(Registries.BLOCK, rl);
             return Either.right(key);
         } else {
-            var rl = ResourceLocation.parse(s);
+            var rl = Identifier.parse(s);
             var rk = ResourceKey.create(Registries.BLOCK, rl);
             return Either.left(rk);
         }
@@ -96,11 +96,11 @@ public class ConfigHelper {
 
     public static Either<ResourceKey<Item>, TagKey<Item>> parseItemOrTag(String s) {
         if (s.startsWith("#")) {
-            var rl = ResourceLocation.parse(s.substring(1));
+            var rl = Identifier.parse(s.substring(1));
             var key = TagKey.create(Registries.ITEM, rl);
             return Either.right(key);
         } else {
-            var rl = ResourceLocation.parse(s);
+            var rl = Identifier.parse(s);
             var rk = ResourceKey.create(Registries.ITEM, rl);
             return Either.left(rk);
         }

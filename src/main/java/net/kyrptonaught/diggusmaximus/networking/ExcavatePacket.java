@@ -10,17 +10,17 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import org.jetbrains.annotations.NotNull;
 
-public record ExcavatePacket(BlockPos pos, ResourceLocation id, Shape shape, Direction hitFace, boolean stopBeforeToolBroken, boolean stopAfterToolBroken) implements CustomPacketPayload {
-    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(ModConstants.MOD_ID, "excavate");
+public record ExcavatePacket(BlockPos pos, Identifier id, Shape shape, Direction hitFace, boolean stopBeforeToolBroken, boolean stopAfterToolBroken) implements CustomPacketPayload {
+    public static final Identifier ID = Identifier.fromNamespaceAndPath(ModConstants.MOD_ID, "excavate");
     public static final Type<ExcavatePacket> TYPE = new Type<>(ID);
 
     public static final StreamCodec<FriendlyByteBuf, ExcavatePacket> CODEC = StreamCodec.of(ExcavatePacket::write, ExcavatePacket::from);
 
-    public ExcavatePacket(BlockPos pos, ResourceLocation id, Shape shape, Direction hitFace) {
+    public ExcavatePacket(BlockPos pos, Identifier id, Shape shape, Direction hitFace) {
         this(pos, id, shape, hitFace, ConfigHelper.getConfig().client.stopBeforeToolBroken, ConfigHelper.getConfig().client.stopAfterToolBroken);
     }
 
@@ -31,7 +31,7 @@ public record ExcavatePacket(BlockPos pos, ResourceLocation id, Shape shape, Dir
 
     public static ExcavatePacket from(FriendlyByteBuf buf) {
         var pos = buf.readBlockPos();
-        var id = buf.readResourceLocation();
+        var id = buf.readIdentifier();
         var shape = buf.readEnum(Shape.class);
         var hitFace = buf.readEnum(Direction.class);
         var stopBeforeToolBroken = buf.readBoolean();
@@ -41,7 +41,7 @@ public record ExcavatePacket(BlockPos pos, ResourceLocation id, Shape shape, Dir
 
     public static void write(FriendlyByteBuf buf, ExcavatePacket payload) {
         buf.writeBlockPos(payload.pos);
-        buf.writeResourceLocation(payload.id);
+        buf.writeIdentifier(payload.id);
         buf.writeEnum(payload.shape);
         buf.writeEnum(payload.hitFace);
         buf.writeBoolean(payload.stopBeforeToolBroken);
