@@ -5,6 +5,7 @@ import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.Config;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import net.kyrptonaught.diggusmaximus.config.ConfigHelper;
+import net.kyrptonaught.diggusmaximus.config.IdOrTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -71,13 +72,13 @@ public class CommonCategory implements ConfigData {
     // region Excluded fields
 
     @ConfigEntry.Gui.Excluded
-    public transient final Set<Either<ResourceKey<Item>, TagKey<Item>>> customTools = new HashSet<>();
+    public transient final Set<IdOrTag<Item>> customTools = new HashSet<>();
 
     @ConfigEntry.Gui.Excluded
-    public transient final List<Set<Either<ResourceKey<Block>, TagKey<Block>>>> blockGroups = new ArrayList<>();
+    public transient final List<Set<IdOrTag<Block>>> blockGroups = new ArrayList<>();
 
     @ConfigEntry.Gui.Excluded
-    public transient final Set<Either<ResourceKey<Block>, TagKey<Block>>> blocked = new HashSet<>();
+    public transient final Set<IdOrTag<Block>> blocked = new HashSet<>();
 
     // endregion
 
@@ -96,19 +97,19 @@ public class CommonCategory implements ConfigData {
         blocked.clear();
 
         for (var s : tools) {
-            customTools.add(ConfigHelper.parseItemOrTag(s));
+            customTools.add(IdOrTag.itemFrom(s));
         }
 
         for (var g : groups) {
-            var set = new HashSet<Either<ResourceKey<Block>, TagKey<Block>>>();
+            var set = new HashSet<IdOrTag<Block>>();
             for (var s : g.split(",")) {
-                set.add(ConfigHelper.parseBlockOrTag(s));
+                set.add(IdOrTag.blockFrom(s));
             }
             blockGroups.add(set);
         }
 
         for (var s : blocklistedBlocks) {
-            blocked.add(ConfigHelper.parseBlockOrTag(s));
+            blocked.add(IdOrTag.blockFrom(s));
         }
     }
 }

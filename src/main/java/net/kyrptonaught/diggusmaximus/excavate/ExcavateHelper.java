@@ -41,8 +41,8 @@ public class ExcavateHelper {
         }
 
         for (var g : ConfigHelper.getConfig().common.blockGroups) {
-            var originalWithIn = g.stream().anyMatch(e -> e.map(original::is, original::is));
-            var consideringWithIn = g.stream().anyMatch(e -> e.map(newBlock::is, newBlock::is));
+            var originalWithIn = g.stream().anyMatch(e -> e.is(original));
+            var consideringWithIn = g.stream().anyMatch(e -> e.is(newBlock));
             return originalWithIn && consideringWithIn;
         }
 
@@ -52,8 +52,7 @@ public class ExcavateHelper {
     public static boolean isBlockDisallowed(Holder<Block> block) {
         var config = ConfigHelper.getConfig().common;
         for (var e : config.blocked) {
-            var r = e.map(block::is, block::is);
-            if (r) {
+            if (e.is(block)) {
                 return !config.asAllowlist;
             }
         }
@@ -112,8 +111,7 @@ public class ExcavateHelper {
         }
 
         for (var e : ConfigHelper.getConfig().common.customTools) {
-            var v = e.map(l -> stack.getItemHolder().is(l), stack::is);
-            if (v) {
+            if (e.is(stack.getItemHolder())) {
                 return true;
             }
         }
