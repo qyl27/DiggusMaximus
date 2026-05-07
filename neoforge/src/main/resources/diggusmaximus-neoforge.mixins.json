@@ -6,6 +6,7 @@
     "client": [
     ],
     "mixins": [
+        "CancelDurabilityMixinNeoForge"
     ],
     "injectors": {
         "defaultRequire": 1
