@@ -1,8 +1,5 @@
 package net.kyrptonaught.diggusmaximus.excavate;
 
-import java.util.List;
-import java.util.Map;
-
 import net.kyrptonaught.diggusmaximus.ModPlatformEvents;
 import net.kyrptonaught.diggusmaximus.config.ConfigHelper;
 import net.minecraft.core.BlockPos;
@@ -20,6 +17,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class ExcavateHelper {
     public static void pickupDrops(Level world, BlockPos pos, Player player) {
@@ -46,7 +45,7 @@ public class ExcavateHelper {
         }
 
         var target = level.getBlockState(targetPos);
-        var targetHolder = target.getBlockHolder();
+        var targetHolder = target.getBlock().builtInRegistryHolder();
 
         if (isBlockDisallowed(targetHolder)) {
             return false;
@@ -122,7 +121,7 @@ public class ExcavateHelper {
         }
 
         for (var e : ConfigHelper.getConfig().common.customTools) {
-            if (e.is(stack.getItemHolder())) {
+            if (e.is(stack.getItem().builtInRegistryHolder())) {
                 return true;
             }
         }
@@ -186,22 +185,14 @@ public class ExcavateHelper {
      * @param target   The target BlockState to compare against
      * @return true if they have same state
      */
-    @SuppressWarnings("unchecked")
     private static boolean hasSameState(BlockState original, BlockState target) {
-        var originalStates = original.getValues();
-        for (Map.Entry<Property<?>, Comparable<?>> entry : originalStates.entrySet()) {
-            var property = entry.getKey();
-            var originalValue = (Comparable<Object>) entry.getValue();
-            var optionalTargetValue = target.getOptionalValue(property);
-            if (optionalTargetValue.isEmpty()) {
-                return false;
-            }
-            var targetValue = (Comparable<Object>) optionalTargetValue.get();
-            if (originalValue.compareTo(targetValue) != 0) {
-                return false;
-            }
-        }
-        return true;
+        return original.getValues().allMatch(value -> hasSamePropertyValue(target, value));
+    }
+
+    private static <T extends Comparable<T>> boolean hasSamePropertyValue(BlockState target, Property.Value<T> originalValue) {
+        return target.getOptionalValue(originalValue.property())
+                .map(targetValue -> originalValue.value().compareTo(targetValue) == 0)
+                .orElse(false);
     }
 
     // </editor-fold>

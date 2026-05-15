@@ -30,15 +30,10 @@ loom {
 dependencies {
     neoForge "net.neoforged:neoforge:${rootProject.neoforge_version}"
 
-    modApi "me.shedaniel.cloth:cloth-config-neoforge:${rootProject.cloth_config_version}"
+    implementation("me.shedaniel.cloth:cloth-config-neoforge:${rootProject.cloth_config_version}") { transitive = false }
 
-    common(project(path: ':', configuration: 'namedElements')) { transitive false }
+    common(project(':')) { transitive = false }
     shadowBundle project(path: ':', configuration: 'transformProductionNeoForge')
-}
-
-remapJar {
-    // Remap aw to at.
-    atAccessWideners.add(loom.accessWidenerPath.get().asFile.name)
 }
 
 unifiedPublishing {
@@ -49,7 +44,7 @@ unifiedPublishing {
         gameLoaders = ['neoforge']
         releaseType = 'release'
 
-        mainPublication tasks.remapJar
+        mainPublication tasks.shadowJar
 
         relations {
             depends {

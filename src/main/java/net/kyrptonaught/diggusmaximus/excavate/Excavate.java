@@ -74,7 +74,7 @@ public class Excavate {
             }
             startBlockHolder = holder.get();
         } else {
-            startBlockHolder = startBlock.getBlockHolder();
+            startBlockHolder = startBlock.getBlock().builtInRegistryHolder();
         }
 
         ((PlayerEntityBridge) player).diggus$setExcavating(true);

@@ -19,8 +19,8 @@ public class ModNetworkingImpl {
     }
 
     public static void registerPackets() {
-        PayloadTypeRegistry.playC2S().register(ExcavatePacket.TYPE, ExcavatePacket.CODEC);
-        PayloadTypeRegistry.playS2C().register(ExcavateFailedPacket.TYPE, ExcavateFailedPacket.CODEC);
+        PayloadTypeRegistry.serverboundPlay().register(ExcavatePacket.TYPE, ExcavatePacket.CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(ExcavateFailedPacket.TYPE, ExcavateFailedPacket.CODEC);
 
         ServerPlayNetworking.registerGlobalReceiver(ExcavatePacket.TYPE, (payload, context) -> {
             ExcavatePacket.handleServer(context.player(), payload);

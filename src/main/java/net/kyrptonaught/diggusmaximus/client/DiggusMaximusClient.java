@@ -31,7 +31,9 @@ public class DiggusMaximusClient {
             }
             config.client.selectedShape = shape;
             ConfigHelper.save();
-            mc.player.displayClientMessage(Component.translatable(shape.getName()), true);
+            if (mc.player != null) {
+                mc.player.sendOverlayMessage(Component.translatable(shape.getName()));
+            }
         }
     }
 }

@@ -2,7 +2,7 @@ package net.kyrptonaught.diggusmaximus.fabric.client;
 
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.kyrptonaught.diggusmaximus.client.DiggusMaximusClient;
 
 public class DiggusMaximusClientFabric implements ClientModInitializer {
@@ -10,8 +10,8 @@ public class DiggusMaximusClientFabric implements ClientModInitializer {
     public void onInitializeClient() {
         ClientTickEvents.END_CLIENT_TICK.register(DiggusMaximusClient::onClientTick);
 
-        KeyBindingHelper.registerKeyBinding(DiggusMaximusClient.EXCAVATE);
-        KeyBindingHelper.registerKeyBinding(DiggusMaximusClient.SHAPED);
-        KeyBindingHelper.registerKeyBinding(DiggusMaximusClient.CYCLE);
+        KeyMappingHelper.registerKeyMapping(DiggusMaximusClient.EXCAVATE);
+        KeyMappingHelper.registerKeyMapping(DiggusMaximusClient.SHAPED);
+        KeyMappingHelper.registerKeyMapping(DiggusMaximusClient.CYCLE);
     }
 }

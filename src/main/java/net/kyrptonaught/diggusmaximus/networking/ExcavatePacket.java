@@ -49,7 +49,7 @@ public record ExcavatePacket(BlockPos pos, Identifier id, Shape shape, Direction
     }
 
     public static void handleServer(ServerPlayer player, ExcavatePacket packet) {
-        var server = player.server;
+        var server = player.level().getServer();
         server.execute(() -> {
             if (packet.shape() != Shape.NONE && !ConfigHelper.getConfig().common.enableShapes) {
                 ModNetworking.sendFailedPacket(player, new ExcavateFailedPacket(ExcavateFailedPacket.Reason.SHAPE_NOT_ENABLED));

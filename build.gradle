@@ -2,13 +2,13 @@ plugins {
     id 'java'
     id 'maven-publish'
     id 'architectury-plugin' version "${architectury_plugin_version}"
-    id 'dev.architectury.loom' version "${architectury_loom_version}"
+    id 'dev.architectury.loom-no-remap' version "${architectury_loom_version}"
     id 'com.gradleup.shadow' version "${shadow_plugin_version}" apply false
     id 'me.shedaniel.unified-publishing' version "${unified_publishing_plugin_version}" apply false
 }
 
 base {
-    archivesName = rootProject.archive_base_name
+    archivesName = "$rootProject.archive_base_name-common"
 }
 
 architectury {
@@ -25,9 +25,9 @@ loom {
 
 dependencies {
     // In order to use the @Environment and @EnvironmentInterface annotations from fabric loader.
-    modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
+    implementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
 
-    modApi "me.shedaniel.cloth:cloth-config:${rootProject.cloth_config_version}"
+    implementation "me.shedaniel.cloth:cloth-config:${rootProject.cloth_config_version}"
 }
 
 sourceSets {
@@ -45,7 +45,7 @@ allprojects {
     apply plugin: 'java'
     apply plugin: 'maven-publish'
     apply plugin: 'architectury-plugin'
-    apply plugin: 'dev.architectury.loom'
+    apply plugin: 'dev.architectury.loom-no-remap'
 
     group = rootProject.maven_group
     version = "${rootProject.mod_version}+mc${project.minecraft_version}"
@@ -84,27 +84,25 @@ allprojects {
     dependencies {
         minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
 
-        mappings loom.layered() {
-            officialMojangMappings()
-            parchment("org.parchmentmc.data:parchment-${rootProject.parchment_minecraft_version}:${rootProject.parchment_version}@zip")
-        }
-
         compileOnly "org.projectlombok:lombok:${project.lombok_version}"
         annotationProcessor "org.projectlombok:lombok:${project.lombok_version}"
     }
 
     tasks.withType(JavaCompile) {
         options.encoding = 'UTF-8'
-        options.release = 21
+        options.release = 25
     }
 
     java {
         withSourcesJar()
+
+        sourceCompatibility = JavaVersion.VERSION_25
+        targetCompatibility = JavaVersion.VERSION_25
     }
 
     jar {
         from('LICENSE') {
-            rename { "${it}_${project.archivesBaseName}" }
+            rename { "${it}_${project.archive_base_name}" }
         }
     }
 
@@ -175,15 +173,9 @@ subprojects {
         runs {
             client {
                 client()
-
                 runDir 'run/client'
-
-                // To support the Enhanced Class Redefinition in JBR.
                 vmArg '-XX:+IgnoreUnrecognizedVMOptions'
                 vmArg '-XX:+AllowEnhancedClassRedefinition'
-
-                // https://openjdk.org/jeps/400
-                property 'file.encoding', 'COMPAT'
             }
 
             server {
@@ -192,6 +184,13 @@ subprojects {
                 vmArg '-XX:+IgnoreUnrecognizedVMOptions'
                 vmArg '-XX:+AllowEnhancedClassRedefinition'
                 property 'file.encoding', 'COMPAT'
+            }
+
+            configureEach {
+                property 'file.encoding', 'UTF-8'
+                property 'stdout.encoding', 'UTF-8'
+                property 'stderr.encoding', 'UTF-8'
+                property 'stdin.encoding', 'UTF-8'
             }
         }
     }
@@ -216,14 +215,14 @@ subprojects {
     dependencies {
     }
 
+    jar {
+        archiveClassifier = 'dev'
+    }
+
     shadowJar {
         exclude 'architectury.common.json'
         configurations = [project.configurations.shadowBundle]
-        archiveClassifier = 'dev-shadow'
-    }
-
-    remapJar {
-        input.set shadowJar.archiveFile
+        archiveClassifier = ''
     }
 
     sourcesJar {
@@ -232,9 +231,7 @@ subprojects {
         from commonSources.archiveFile.map { zipTree(it) }
     }
 
-    components.java {
-        withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
-            skip()
-        }
+    shadow {
+        addShadowVariantIntoJavaComponent = false
     }
 }
