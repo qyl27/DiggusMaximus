@@ -47,9 +47,9 @@ public class ZhCnProvider extends LanguageProvider {
         add(buildAutoConfigKey("common", "shapeIgnoreIdMismatch"), "允许形状挖掘包含不同的方块");
         add(buildAutoConfigKeyTooltip("common", "shapeIgnoreIdMismatch"), "在方块ID不同的时候依然按形状挖掘");
         add(buildAutoConfigKey("common", "blocklistedBlocks"), "禁止连锁列表");
-        add(buildAutoConfigKeyTooltip("common", "blocklistedBlocks"), "支持ID和Tag");
-        add(buildAutoConfigKey("common", "asAllowlist"), "换用白名单模式");
-        add(buildAutoConfigKeyTooltip("common", "asAllowlist"), "即变为“允许连锁列表”");
+        add(buildAutoConfigKeyTooltip("common", "blocklistedBlocks"), "禁止列表中的方块被连锁，支持ID和Tag");
+        add(buildAutoConfigKey("common", "asAllowlist"), "↑换用白名单模式");
+        add(buildAutoConfigKeyTooltip("common", "asAllowlist"), "只有列表中的方块才能被连锁");
         add(buildAutoConfigKey("common", "matchBlockState"), "不挖掘ID相同但方块状态不同的方块（例如：不同成熟程度的作物）");
         add(buildAutoConfigKeyTooltip("common", "matchBlockState"), "支持ID和Tag");
 
