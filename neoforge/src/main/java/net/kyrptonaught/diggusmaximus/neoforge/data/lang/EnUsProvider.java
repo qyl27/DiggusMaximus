@@ -46,10 +46,10 @@ public class EnUsProvider extends LanguageProvider {
         add(buildAutoConfigKey("common", "enableShapes"), "Enable Shape Excavation");
         add(buildAutoConfigKey("common", "shapeIgnoreIdMismatch"), "Allow Different Block in Shape Mining");
         add(buildAutoConfigKeyTooltip("common", "shapeIgnoreIdMismatch"), "Allows excavation even if block IDs don't match");
-        add(buildAutoConfigKey("common", "blocklistedBlocks"), "Blocklisted blocks");
+        add(buildAutoConfigKey("common", "blocklistedBlocks"), "List of blocks which should never be excavated");
         add(buildAutoConfigKeyTooltip("common", "blocklistedBlocks"), "Supports IDs and Tags");
-        add(buildAutoConfigKey("common", "asAllowlist"), "Use Allowlist Mode");
-        add(buildAutoConfigKeyTooltip("common", "asAllowlist"), "Changes to an ‘allowed blocks’ list");
+        add(buildAutoConfigKey("common", "asAllowlist"), "↑ Use allowlist instead of blacklist");
+        add(buildAutoConfigKeyTooltip("common", "asAllowlist"), "Only blocks in the list will be excavated");
         add(buildAutoConfigKey("common", "matchBlockState"), "Don't mine blocks with same id but different state (e.g. you want to mine only matured crops)");
         add(buildAutoConfigKeyTooltip("common", "matchBlockState"), "Supports IDs and Tags");
 
