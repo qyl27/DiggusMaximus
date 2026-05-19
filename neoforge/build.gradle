@@ -5,20 +5,10 @@ architectury {
 
 loom {
     runs {
-        clientData {
+        data {
             clientData()
 
-            runDir 'run/data/client'
-
-            programArgs '--all', '--mod', "${project.mod_id}"
-            programArgs '--output', file('../src/generated/resources').absolutePath
-            programArgs '--existing', file('../src/main/resources').absolutePath
-        }
-
-        serverData {
-            serverData()
-
-            runDir 'run/data/server'
+            runDir 'run/data'
 
             programArgs '--all', '--mod', "${project.mod_id}"
             programArgs '--output', file('../src/generated/resources').absolutePath
