@@ -42,12 +42,12 @@ unifiedPublishing {
         }
 
         curseforge {
-            token = Objects.requireNonNullElse(System.getenv('CURSEFORGE_TOKEN'), "")
+            token = Objects.requireNonNullElse(System.getenv('MOD_CURSEFORGE_TOKEN'), "")
             id = rootProject.curseforge_project_id
         }
 
         modrinth {
-            token = Objects.requireNonNullElse(System.getenv('MODRINTH_TOKEN'), "")
+            token = Objects.requireNonNullElse(System.getenv('MOD_MODRINTH_TOKEN'), "")
             id = rootProject.modrinth_project_id
         }
     }
