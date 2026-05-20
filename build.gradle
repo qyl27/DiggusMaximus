@@ -7,6 +7,8 @@ plugins {
     id 'me.shedaniel.unified-publishing' version "${unified_publishing_plugin_version}" apply false
 }
 
+def ENV = System.getenv()
+
 base {
     archivesName = "$rootProject.archive_base_name-common"
 }
@@ -149,6 +151,19 @@ allprojects {
     publishing {
         repositories {
             mavenLocal()
+
+            maven {
+                name = 'YuluoMaven'
+
+                def releaseUrl = 'https://maven.yuluo.dev/repository/maven-releases/'
+                def snapshotUrl = 'https://maven.yuluo.dev/repository/maven-snapshots/'
+                url = ENV.MOD_RELEASE ? releaseUrl : snapshotUrl
+
+                credentials {
+                    username ENV.MOD_MAVEN_USER
+                    password ENV.MOD_MAVEN_PASS
+                }
+            }
         }
 
         publications {
