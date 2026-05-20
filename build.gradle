@@ -43,6 +43,15 @@ sourceSets {
     }
 }
 
+publishing {
+    publications {
+        maven(MavenPublication) {
+            artifactId = project.base.archivesName.get()
+            from components.java
+        }
+    }
+}
+
 allprojects {
     apply plugin: 'java'
     apply plugin: 'maven-publish'
@@ -165,12 +174,6 @@ allprojects {
                 }
             }
         }
-
-        publications {
-            maven(MavenPublication) {
-                from components.java
-            }
-        }
     }
 }
 
@@ -248,5 +251,14 @@ subprojects {
 
     shadow {
         addShadowVariantIntoJavaComponent = false
+    }
+
+    publishing {
+        publications {
+            maven(MavenPublication) {
+                artifactId = project.base.archivesName.get()
+                from components.java
+            }
+        }
     }
 }
