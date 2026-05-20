@@ -1,4 +1,4 @@
-package net.kyrptonaught.diggusmaximus.mixin;
+package net.kyrptonaught.diggusmaximus.fabric.mixin;
 
 import net.kyrptonaught.diggusmaximus.bridge.PlayerEntityBridge;
 import net.kyrptonaught.diggusmaximus.config.ConfigHelper;
@@ -14,15 +14,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.function.Consumer;
 
 @Mixin(ItemStack.class)
-public class MixinCancelDurability {
+public abstract class CancelDurabilityMixinFabric {
 
     @Inject(method = "hurtAndBreak(ILnet/minecraft/server/level/ServerLevel;Lnet/minecraft/server/level/ServerPlayer;Ljava/util/function/Consumer;)V", at = @At(value = "HEAD"), cancellable = true)
     private void beforeHurtAndBreak(int amount, ServerLevel world, ServerPlayer player,
                                     Consumer<Item> breakCallback, CallbackInfo ci) {
-        if (player != null
-                && ((PlayerEntityBridge) player).diggus$isExcavating()
-                && !ConfigHelper.getConfig().common.causeToolDamage) {
-            ci.cancel();
+        if (player instanceof PlayerEntityBridge bridged) {
+            if (bridged.diggus$isExcavating() && !ConfigHelper.getConfig().common.causeToolDamage) {
+                ci.cancel();
+            }
         }
     }
 }

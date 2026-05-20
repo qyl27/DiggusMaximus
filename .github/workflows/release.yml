@@ -1,0 +1,39 @@
+name: Mod Release
+on:
+  push:
+    tags:
+      - 'v**'
+
+jobs:
+  build:
+    uses: ./.github/workflows/build.yml
+    secrets: inherit
+    with:
+      mod-release: true
+      upload-artifacts: true
+      publish-maven: true
+      publish-mod: true
+
+  upload:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v5
+        with:
+          name: 'build'
+          path: 'output'
+      - run: ls -R output
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+          make_latest: true
+          preserve_order: true
+          tag_name: ${{ github.ref_name }}
+          name: "Release ${{ github.ref_name }}"
+          files: |
+            output/**/*@(-neoforge|-fabric)*@(.[0-9])+mc@(.[0-9]).jar
