@@ -7,6 +7,8 @@ plugins {
     id 'me.shedaniel.unified-publishing' version "${unified_publishing_plugin_version}" apply false
 }
 
+def ENV = System.getenv()
+
 base {
     archivesName = rootProject.archive_base_name
 }
@@ -37,6 +39,15 @@ sourceSets {
             if (providers.gradleProperty('MOD_DEVELOPMENT').present) {
                 srcDir file('src/test/resources')
             }
+        }
+    }
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            artifactId = project.base.archivesName.get()
+            from components.java
         }
     }
 }
@@ -150,11 +161,18 @@ allprojects {
     publishing {
         repositories {
             mavenLocal()
-        }
 
-        publications {
-            maven(MavenPublication) {
-                from components.java
+            maven {
+                name = 'YuluoMaven'
+
+                def releaseUrl = 'https://maven.yuluo.dev/repository/maven-releases/'
+                def snapshotUrl = 'https://maven.yuluo.dev/repository/maven-snapshots/'
+                url = ENV.MOD_RELEASE ? releaseUrl : snapshotUrl
+
+                credentials {
+                    username ENV.MOD_MAVEN_USER
+                    password ENV.MOD_MAVEN_PASS
+                }
             }
         }
     }
@@ -234,6 +252,15 @@ subprojects {
     components.java {
         withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
             skip()
+        }
+    }
+
+    publishing {
+        publications {
+            maven(MavenPublication) {
+                artifactId = project.base.archivesName.get()
+                from components.java
+            }
         }
     }
 }

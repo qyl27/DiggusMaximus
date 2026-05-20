@@ -56,17 +56,16 @@ public class CommonCategory implements ConfigData {
     @ConfigEntry.Gui.Tooltip
     public List<String> groups = new ArrayList<>();
 
-    @ConfigEntry.Gui.Tooltip
     public boolean enableShapes = true;
 
     @ConfigEntry.Gui.Tooltip
     public boolean shapeIgnoreIdMismatch = true;
 
     @ConfigEntry.Gui.Tooltip
-    public boolean asAllowlist = false;
+    public List<String> blocklistedBlocks = new ArrayList<>();
 
     @ConfigEntry.Gui.Tooltip
-    public List<String> blocklistedBlocks = new ArrayList<>();
+    public boolean asAllowlist = false;
 
     // region Excluded fields
 
