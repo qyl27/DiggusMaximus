@@ -30,6 +30,10 @@ dependencies {
     implementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
 
     implementation "me.shedaniel.cloth:cloth-config:${rootProject.cloth_config_version}"
+
+    testImplementation platform("org.junit:junit-bom:${rootProject.junit_version}")
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 sourceSets {
@@ -95,11 +99,16 @@ allprojects {
     dependencies {
         minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
 
+        compileOnly "org.jetbrains:annotations:${rootProject.jetbrains_annotation_version}"
+
         compileOnly "org.projectlombok:lombok:${project.lombok_version}"
         annotationProcessor "org.projectlombok:lombok:${project.lombok_version}"
+
+        testCompileOnly "org.projectlombok:lombok:${project.lombok_version}"
+        testAnnotationProcessor "org.projectlombok:lombok:${project.lombok_version}"
     }
 
-    tasks.withType(JavaCompile) {
+    tasks.withType(JavaCompile).configureEach {
         options.encoding = 'UTF-8'
         options.release = 25
     }
@@ -157,6 +166,10 @@ allprojects {
         }
     }
 
+    tasks.withType(Test).configureEach {
+        useJUnitPlatform()
+    }
+
     publishing {
         repositories {
             mavenLocal()
@@ -192,19 +205,16 @@ subprojects {
             client {
                 client()
                 runDir 'run/client'
-                vmArg '-XX:+IgnoreUnrecognizedVMOptions'
-                vmArg '-XX:+AllowEnhancedClassRedefinition'
             }
 
             server {
                 server()
                 runDir 'run/server'
-                vmArg '-XX:+IgnoreUnrecognizedVMOptions'
-                vmArg '-XX:+AllowEnhancedClassRedefinition'
-                property 'file.encoding', 'COMPAT'
             }
 
             configureEach {
+                vmArg '-XX:+IgnoreUnrecognizedVMOptions'
+                vmArg '-XX:+AllowEnhancedClassRedefinition'
                 property 'file.encoding', 'UTF-8'
                 property 'stdout.encoding', 'UTF-8'
                 property 'stderr.encoding', 'UTF-8'
