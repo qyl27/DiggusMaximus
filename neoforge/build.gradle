@@ -18,9 +18,9 @@ loom {
 }
 
 dependencies {
-    neoForge "net.neoforged:neoforge:${rootProject.neoforge_version}"
+    neoForge libs.neoForge
 
-    implementation("me.shedaniel.cloth:cloth-config-neoforge:${rootProject.cloth_config_version}") { transitive = false }
+    implementation(libs.clothConfigNeoForge) { transitive = false }
 
     common(project(':')) { transitive = false }
     shadowBundle project(path: ':', configuration: 'transformProductionNeoForge')
@@ -28,7 +28,7 @@ dependencies {
 
 unifiedPublishing {
     project {
-        displayName = "(NeoForge) ${rootProject.mod_version} for MC ${rootProject.minecraft_version}"
+        displayName = "(NeoForge) ${rootProject.mod_version} for MC ${libs.versions.minecraft.get()}"
         version = rootProject.version
         gameVersions = rootProject.game_versions.split(',').toList()
         gameLoaders = ['neoforge']

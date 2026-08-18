@@ -4,11 +4,11 @@ architectury {
 }
 
 dependencies {
-    implementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
-    implementation "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"
+    implementation libs.fabricLoader
+    implementation libs.fabricApi
 
-    implementation("me.shedaniel.cloth:cloth-config-fabric:${rootProject.cloth_config_version}") { transitive = false }
-    implementation("com.terraformersmc:modmenu:${rootProject.fabric_mod_menu_version}") { transitive = false }
+    implementation(libs.clothConfigFabric) { transitive = false }
+    implementation(libs.modMenu) { transitive = false }
 
     common(project(':')) { transitive = false }
     shadowBundle project(path: ':', configuration: 'transformProductionFabric')
@@ -16,7 +16,7 @@ dependencies {
 
 unifiedPublishing {
     project {
-        displayName = "(Fabric) ${rootProject.mod_version} for MC ${rootProject.minecraft_version}"
+        displayName = "(Fabric) ${rootProject.mod_version} for MC ${libs.versions.minecraft.get()}"
         version = rootProject.version
         gameVersions = rootProject.game_versions.split(',').toList()
         gameLoaders = ['fabric']

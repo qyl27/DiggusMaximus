@@ -1,13 +1,14 @@
 plugins {
     id 'java'
     id 'maven-publish'
-    id 'architectury-plugin' version "${architectury_plugin_version}"
-    id 'dev.architectury.loom-no-remap' version "${architectury_loom_version}"
-    id 'com.gradleup.shadow' version "${shadow_plugin_version}" apply false
-    id 'me.shedaniel.unified-publishing' version "${unified_publishing_plugin_version}" apply false
+    alias(libs.plugins.architectury)
+    alias(libs.plugins.architecturyLoom)
+    alias(libs.plugins.shadow) apply false
+    alias(libs.plugins.unifiedPublishing) apply false
 }
 
 def ENV = System.getenv()
+def minecraftVersion = libs.versions.minecraft.get()
 
 base {
     archivesName = "$rootProject.archive_base_name-common"
@@ -27,13 +28,13 @@ loom {
 
 dependencies {
     // In order to use the @Environment and @EnvironmentInterface annotations from fabric loader.
-    implementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
+    implementation libs.fabricLoader
 
-    implementation "me.shedaniel.cloth:cloth-config:${rootProject.cloth_config_version}"
+    implementation libs.clothConfig
 
-    testImplementation platform("org.junit:junit-bom:${rootProject.junit_version}")
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testImplementation platform(libs.junitBom)
+    testImplementation libs.junitJupiter
+    testRuntimeOnly libs.junitPlatformLauncher
 }
 
 sourceSets {
@@ -63,10 +64,10 @@ allprojects {
     apply plugin: 'dev.architectury.loom-no-remap'
 
     group = rootProject.maven_group
-    version = "${rootProject.mod_version}+mc${project.minecraft_version}"
+    version = "${rootProject.mod_version}+mc${minecraftVersion}"
 
     architectury {
-        minecraft = project.minecraft_version
+        minecraft = minecraftVersion
     }
 
     loom {
@@ -97,15 +98,15 @@ allprojects {
     }
 
     dependencies {
-        minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
+        minecraft libs.minecraft
 
-        compileOnly "org.jetbrains:annotations:${rootProject.jetbrains_annotation_version}"
+        compileOnly libs.jetbrainsAnnotations
 
-        compileOnly "org.projectlombok:lombok:${project.lombok_version}"
-        annotationProcessor "org.projectlombok:lombok:${project.lombok_version}"
+        compileOnly libs.lombok
+        annotationProcessor libs.lombok
 
-        testCompileOnly "org.projectlombok:lombok:${project.lombok_version}"
-        testAnnotationProcessor "org.projectlombok:lombok:${project.lombok_version}"
+        testCompileOnly libs.lombok
+        testAnnotationProcessor libs.lombok
     }
 
     tasks.withType(JavaCompile).configureEach {
@@ -137,14 +138,6 @@ allprojects {
         var replaceTokens = [
                 mod_id                             : rootProject.mod_id,
                 mod_version                        : rootProject.mod_version,
-
-                minecraft_version                  : rootProject.minecraft_version,
-                fabric_loader_version              : rootProject.fabric_loader_version,
-                fabric_api_version                 : rootProject.fabric_api_version,
-                neoforge_loader_version            : rootProject.neoforge_loader_version,
-                neoforge_version                   : rootProject.neoforge_version,
-
-                cloth_config_version               : rootProject.cloth_config_version,
 
                 neoforge_minecraft_version_range   : rootProject.neoforge_minecraft_version_range,
                 neoforge_loader_version_range      : rootProject.neoforge_loader_version_range,

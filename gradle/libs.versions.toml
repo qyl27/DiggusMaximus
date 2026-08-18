@@ -1,0 +1,40 @@
+[versions]
+architecturyPlugin = "3.5-SNAPSHOT"
+architecturyLoom = "1.14-SNAPSHOT"
+shadow = "9.3.0+"
+unifiedPublishing = "0.1.+"
+
+minecraft = "26.1.2"
+neoForge = "26.1.2.50-beta"
+fabricLoader = "0.19.2"
+fabricApi = "0.148.2+26.1.2"
+modMenu = "18.0.0-beta.1"
+clothConfig = "26.1.154"
+jetbrainsAnnotations = "26.1.0"
+lombok = "1.18.42"
+junit = "6.1.2"
+
+[libraries]
+minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
+neoForge = { module = "net.neoforged:neoforge", version.ref = "neoForge" }
+
+fabricLoader = { module = "net.fabricmc:fabric-loader", version.ref = "fabricLoader" }
+fabricApi = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabricApi" }
+
+clothConfig = { module = "me.shedaniel.cloth:cloth-config", version.ref = "clothConfig" }
+clothConfigFabric = { module = "me.shedaniel.cloth:cloth-config-fabric", version.ref = "clothConfig" }
+clothConfigNeoForge = { module = "me.shedaniel.cloth:cloth-config-neoforge", version.ref = "clothConfig" }
+modMenu = { module = "com.terraformersmc:modmenu", version.ref = "modMenu" }
+
+jetbrainsAnnotations = { module = "org.jetbrains:annotations", version.ref = "jetbrainsAnnotations" }
+lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
+
+junitBom = { module = "org.junit:junit-bom", version.ref = "junit" }
+junitJupiter = { module = "org.junit.jupiter:junit-jupiter" }
+junitPlatformLauncher = { module = "org.junit.platform:junit-platform-launcher" }
+
+[plugins]
+architectury = { id = "architectury-plugin", version.ref = "architecturyPlugin" }
+architecturyLoom = { id = "dev.architectury.loom-no-remap", version.ref = "architecturyLoom" }
+shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
+unifiedPublishing = { id = "me.shedaniel.unified-publishing", version.ref = "unifiedPublishing" }
