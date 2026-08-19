@@ -1,6 +1,6 @@
 [versions]
 architectury-plugin = "3.5-SNAPSHOT"
-architectury-loom = "1.14-SNAPSHOT"
+architectury-loom = "1.17-SNAPSHOT"
 shadow = "9.3.0+"
 mod-publish = "2.2.0"
 
