@@ -174,8 +174,8 @@ allprojects {
                 url = providers.environmentVariable('MOD_RELEASE').isPresent() ? releaseUrl : snapshotUrl
 
                 credentials {
-                    username providers.environmentVariable('MOD_MAVEN_USER').orElse(null).get()
-                    password providers.environmentVariable('MOD_MAVEN_PASS').orElse(null).get()
+                    username providers.environmentVariable('MOD_MAVEN_USER').getOrElse(null)
+                    password providers.environmentVariable('MOD_MAVEN_PASS').getOrElse(null)
                 }
             }
         }
