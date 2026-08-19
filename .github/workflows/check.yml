@@ -2,19 +2,23 @@ name: Build check
 on:
   push:
     paths:
+      - .github/workflows/*
       - src/**/*
       - neoforge/**/*
       - fabric/**/*
       - test/**/*
+      - gradle/*
       - build.gradle
       - gradle.properties
       - settings.gradle
   pull_request:
     paths:
+      - .github/workflows/*
       - src/**/*
       - neoforge/**/*
       - fabric/**/*
       - test/**/*
+      - gradle/*
       - build.gradle
       - gradle.properties
       - settings.gradle
