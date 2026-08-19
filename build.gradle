@@ -1,10 +1,10 @@
 plugins {
     id 'java'
     id 'maven-publish'
-    alias(libs.plugins.architectury)
-    alias(libs.plugins.architecturyLoom)
+    alias(libs.plugins.architectury.plugin)
+    alias(libs.plugins.architectury.loom)
     alias(libs.plugins.shadow) apply false
-    alias(libs.plugins.modPublish)
+    alias(libs.plugins.mod.publish)
 }
 
 def minecraftVersion = libs.versions.minecraft.get()
@@ -27,13 +27,13 @@ loom {
 
 dependencies {
     // In order to use the @Environment and @EnvironmentInterface annotations from fabric loader.
-    implementation libs.fabricLoader
+    implementation libs.fabric.loader
 
-    implementation libs.clothConfig
+    implementation libs.cloth.config.common
 
-    testImplementation platform(libs.junitBom)
-    testImplementation libs.junitJupiter
-    testRuntimeOnly libs.junitPlatformLauncher
+    testImplementation platform(libs.junit.bom)
+    testImplementation libs.junit.jupiter
+    testRuntimeOnly libs.junit.platform.launcher
 }
 
 sourceSets {
@@ -99,7 +99,7 @@ allprojects {
     dependencies {
         minecraft libs.minecraft
 
-        compileOnly libs.jetbrainsAnnotations
+        compileOnly libs.jetbrains.annotations
 
         compileOnly libs.lombok
         annotationProcessor libs.lombok

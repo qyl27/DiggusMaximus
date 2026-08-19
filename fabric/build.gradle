@@ -4,11 +4,11 @@ architectury {
 }
 
 dependencies {
-    implementation libs.fabricLoader
-    implementation libs.fabricApi
+    implementation libs.fabric.loader
+    implementation libs.fabric.api
 
-    implementation(libs.clothConfigFabric) { transitive = false }
-    implementation(libs.modMenu) { transitive = false }
+    implementation(libs.cloth.config.fabric) { transitive = false }
+    implementation(libs.mod.menu) { transitive = false }
 
     common(project(':')) { transitive = false }
     shadowBundle project(path: ':', configuration: 'transformProductionFabric')

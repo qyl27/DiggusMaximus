@@ -18,9 +18,9 @@ loom {
 }
 
 dependencies {
-    neoForge libs.neoForge
+    neoForge libs.neoforge
 
-    implementation(libs.clothConfigNeoForge) { transitive = false }
+    implementation(libs.cloth.config.neoforge) { transitive = false }
 
     common(project(':')) { transitive = false }
     shadowBundle project(path: ':', configuration: 'transformProductionNeoForge')
