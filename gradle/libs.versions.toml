@@ -2,7 +2,7 @@
 architecturyPlugin = "3.5-SNAPSHOT"
 architecturyLoom = "1.14-SNAPSHOT"
 shadow = "9.3.0+"
-unifiedPublishing = "0.1.+"
+modPublish = "2.2.0"
 
 minecraft = "26.1.2"
 neoForge = "26.1.2.50-beta"
@@ -37,4 +37,4 @@ junitPlatformLauncher = { module = "org.junit.platform:junit-platform-launcher" 
 architectury = { id = "architectury-plugin", version.ref = "architecturyPlugin" }
 architecturyLoom = { id = "dev.architectury.loom-no-remap", version.ref = "architecturyLoom" }
 shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
-unifiedPublishing = { id = "me.shedaniel.unified-publishing", version.ref = "unifiedPublishing" }
+modPublish = { id = "me.modmuss50.mod-publish-plugin", version.ref = "modPublish" }

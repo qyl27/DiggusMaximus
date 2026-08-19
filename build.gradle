@@ -4,10 +4,9 @@ plugins {
     alias(libs.plugins.architectury)
     alias(libs.plugins.architecturyLoom)
     alias(libs.plugins.shadow) apply false
-    alias(libs.plugins.unifiedPublishing) apply false
+    alias(libs.plugins.modPublish)
 }
 
-def ENV = System.getenv()
 def minecraftVersion = libs.versions.minecraft.get()
 
 base {
@@ -172,11 +171,11 @@ allprojects {
 
                 def releaseUrl = 'https://maven.yuluo.dev/repository/maven-releases/'
                 def snapshotUrl = 'https://maven.yuluo.dev/repository/maven-snapshots/'
-                url = ENV.MOD_RELEASE ? releaseUrl : snapshotUrl
+                url = providers.environmentVariable('MOD_RELEASE').isPresent() ? releaseUrl : snapshotUrl
 
                 credentials {
-                    username ENV.MOD_MAVEN_USER
-                    password ENV.MOD_MAVEN_PASS
+                    username providers.environmentVariable('MOD_MAVEN_USER').get()
+                    password providers.environmentVariable('MOD_MAVEN_PASS').get()
                 }
             }
         }
@@ -185,7 +184,6 @@ allprojects {
 
 subprojects {
     apply plugin: 'com.gradleup.shadow'
-    apply plugin: 'me.shedaniel.unified-publishing'
 
     base {
         archivesName = "$rootProject.archive_base_name-$project.name"
@@ -263,5 +261,60 @@ subprojects {
                 from components.java
             }
         }
+    }
+}
+
+publishMods {
+    version = rootProject.version.toString()
+    changelog = providers.environmentVariable('MOD_CHANGELOG').orElse('')
+    type = STABLE
+    dryRun = providers.environmentVariable('MOD_PUBLISH_DRY_RUN').isPresent()
+
+    def curseforgeShared = curseforgeOptions {
+        accessToken = providers.environmentVariable('MOD_CURSEFORGE_TOKEN')
+        projectId = rootProject.curseforge_project_id
+        minecraftVersions.addAll(rootProject.game_versions.split(','))
+        client = true
+        server = true
+    }
+
+    def modrinthShared = modrinthOptions {
+        accessToken = providers.environmentVariable('MOD_MODRINTH_TOKEN')
+        projectId = rootProject.modrinth_project_id
+        minecraftVersions.addAll(rootProject.game_versions.split(','))
+    }
+
+    def fabricShared = publishOptions {
+        file = project(':fabric').shadowJar.archiveFile
+        displayName = "(Fabric) ${rootProject.mod_version} for MC ${minecraftVersion}"
+        modLoaders.add('fabric')
+    }
+
+    def neoForgeShared = publishOptions {
+        file = project(':neoforge').shadowJar.archiveFile
+        displayName = "(NeoForge) ${rootProject.mod_version} for MC ${minecraftVersion}"
+        modLoaders.add('neoforge')
+    }
+
+    curseforge('curseforgeFabric') {
+        from(curseforgeShared, fabricShared)
+        requires('fabric-api', 'cloth-config')
+        optional('modmenu')
+    }
+
+    modrinth('modrinthFabric') {
+        from(modrinthShared, fabricShared)
+        requires('fabric-api', 'cloth-config')
+        optional('modmenu')
+    }
+
+    curseforge('curseforgeNeoForge') {
+        from(curseforgeShared, neoForgeShared)
+        requires('cloth-config')
+    }
+
+    modrinth('modrinthNeoForge') {
+        from(modrinthShared, neoForgeShared)
+        requires('cloth-config')
     }
 }

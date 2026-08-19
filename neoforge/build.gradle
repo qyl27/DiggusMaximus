@@ -25,32 +25,3 @@ dependencies {
     common(project(':')) { transitive = false }
     shadowBundle project(path: ':', configuration: 'transformProductionNeoForge')
 }
-
-unifiedPublishing {
-    project {
-        displayName = "(NeoForge) ${rootProject.mod_version} for MC ${libs.versions.minecraft.get()}"
-        version = rootProject.version
-        gameVersions = rootProject.game_versions.split(',').toList()
-        gameLoaders = ['neoforge']
-        releaseType = 'release'
-
-        mainPublication tasks.shadowJar
-
-        relations {
-            depends {
-                curseforge = 'cloth-config'
-                modrinth = 'cloth-config'
-            }
-        }
-
-        curseforge {
-            token = Objects.requireNonNullElse(System.getenv('MOD_CURSEFORGE_TOKEN'), "")
-            id = rootProject.curseforge_project_id
-        }
-
-        modrinth {
-            token = Objects.requireNonNullElse(System.getenv('MOD_MODRINTH_TOKEN'), "")
-            id = rootProject.modrinth_project_id
-        }
-    }
-}
