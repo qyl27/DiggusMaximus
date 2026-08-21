@@ -156,13 +156,13 @@ class ShapeSpreadStrategyTest {
     }
 
     @Test
-    void continuesOnlyWhenCoreAndAllExtraBlocksWereMined() {
+    void continuesOnlyWhenCorWereMined() {
         for (Shape shape : Shape.values()) {
             assertFalse(shape.getSpreadStrategy().canContinueSpread(false, 0, 0));
             assertFalse(shape.getSpreadStrategy().canContinueSpread(false, 1, 1));
             assertTrue(shape.getSpreadStrategy().canContinueSpread(true, 0, 0));
-            assertFalse(shape.getSpreadStrategy().canContinueSpread(true, 0, 1));
-            assertFalse(shape.getSpreadStrategy().canContinueSpread(true, 1, 2));
+            assertTrue(shape.getSpreadStrategy().canContinueSpread(true, 0, 1));
+            assertTrue(shape.getSpreadStrategy().canContinueSpread(true, 1, 2));
             assertTrue(shape.getSpreadStrategy().canContinueSpread(true, 1, 1));
             assertTrue(shape.getSpreadStrategy().canContinueSpread(true, 8, 8));
         }
