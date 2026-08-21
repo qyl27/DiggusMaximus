@@ -1,8 +1,8 @@
 package net.kyrptonaught.diggusmaximus.excavate;
 
-import net.kyrptonaught.diggusmaximus.ModPlatformEvents;
 import net.kyrptonaught.diggusmaximus.bridge.PlayerEntityBridge;
 import net.kyrptonaught.diggusmaximus.config.ConfigHelper;
+import net.kyrptonaught.diggusmaximus.util.HolderHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
@@ -33,7 +33,7 @@ public class Excavate {
     private final BlockState startBlock;
     private Holder<Block> startBlockHolder;
 
-    private final Deque<BlockPos> points = new ArrayDeque<>();
+    private final Deque<BlockPos> spreadCores = new ArrayDeque<>();
 
     private final Shape shape;
     private final Direction hitFace;
@@ -63,7 +63,7 @@ public class Excavate {
     }
 
     public void startExcavate() {
-        forceExcavateAt(startPos);
+        onExcavatedAt(startPos);
 
         if (startBlock == null || startBlock.isAir()) {
             var holder = BuiltInRegistries.BLOCK.get(startId);
@@ -74,38 +74,54 @@ public class Excavate {
             }
             startBlockHolder = holder.get();
         } else {
-            startBlockHolder = startBlock.getBlock().builtInRegistryHolder();
+            startBlockHolder = HolderHelper.get(startBlock.getBlock());
         }
 
         ((PlayerEntityBridge) player).diggus$setExcavating(true);
-        while (!points.isEmpty()) {
-            spread(points.remove());
+        processSpreadCore(startPos, true);
+        while (!spreadCores.isEmpty()) {
+            var spreadCore = spreadCores.removeFirst();
+            processSpreadCore(spreadCore, tryExcavateAt(spreadCore));
         }
         ((PlayerEntityBridge) player).diggus$setExcavating(false);
     }
 
-    private void spread(BlockPos pos) {
-        for (Vec3i offset : ExcavateSpreadHelper.getSpreadShape(shape, hitFace, facing, startPos, pos)) {
-            if (ExcavateHelper.isValidOffset(offset)) {
-                excavateAt(pos.offset(offset));
+    private void processSpreadCore(BlockPos current, boolean coreMined) {
+        var extraBlocks = shape.getSpreadStrategy().getExtraBlocks(hitFace);
+        int extraBlocksMined = 0;
+
+        if (coreMined) {
+            for (Vec3i offset : extraBlocks) {
+                if (tryExcavateAt(current.offset(offset))) {
+                    extraBlocksMined++;
+                }
             }
         }
-    }
 
-    private void excavateAt(BlockPos pos) {
-        if (mined >= ConfigHelper.getConfig().common.maxMinedBlocks) {
+        if (!shape.getSpreadStrategy().canContinueSpread(coreMined, extraBlocksMined, extraBlocks.size())) {
             return;
         }
 
-        if (ExcavateHelper.isValid(level, startBlock, startPos, startBlockHolder, pos,
-                player, startTool, shape != Shape.NONE, stopBeforeToolBroken, stopAfterToolBroken)
-                && ExcavateHelper.tryToExcavate(player, pos)) {
-            forceExcavateAt(pos);
+        for (Vec3i offset : shape.getSpreadStrategy().getNextSpreadCores(hitFace, facing)) {
+            spreadCores.addLast(current.offset(offset));
         }
     }
 
-    private void forceExcavateAt(BlockPos pos) {
-        points.add(pos);
+    private boolean tryExcavateAt(BlockPos pos) {
+        if (mined >= ConfigHelper.getConfig().common.maxMinedBlocks) {
+            return false;
+        }
+
+        if (ExcavateHelper.isValid(level, startBlock, startPos, startBlockHolder, pos,
+            player, startTool, shape != Shape.NONE, stopBeforeToolBroken, stopAfterToolBroken)
+            && ExcavateHelper.tryToExcavate(player, pos)) {
+            onExcavatedAt(pos);
+            return true;
+        }
+        return false;
+    }
+
+    private void onExcavatedAt(BlockPos pos) {
         mined++;
         if (ConfigHelper.getConfig().common.autoPickup) {
             ExcavateHelper.pickupDrops(level, pos, player);

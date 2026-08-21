@@ -2,25 +2,32 @@ package net.kyrptonaught.diggusmaximus.excavate;
 
 import lombok.Getter;
 import net.kyrptonaught.diggusmaximus.ModConstants;
+import net.kyrptonaught.diggusmaximus.excavate.spread.*;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
 
-@Getter
+import java.util.List;
+
 public enum Shape {
-    NONE(-1, ModConstants.SHAPE_NONE),
-    HORIZONTAL_LAYER(0, ModConstants.SHAPE_HORIZONTAL_LAYER),
-    LAYER(1, ModConstants.SHAPE_LAYER),
-    HOLE(2, ModConstants.SHAPE_HOLE),
-    ONE_BY_TWO(3, ModConstants.SHAPE_ONE_BY_TWO),
-    ONE_BY_TWO_TUNNEL(4, ModConstants.SHAPE_ONE_BY_TWO_TUNNEL),
-    THREE_BY_THREE(5, ModConstants.SHAPE_THREE_BY_THREE),
-    THREE_BY_THREE_TUNNEL(6, ModConstants.SHAPE_THREE_BY_THREE_TUNNEL),
+    NONE(ModConstants.SHAPE_NONE, new NoShapeSpreadStrategy()),
+    HORIZONTAL_LAYER(ModConstants.SHAPE_HORIZONTAL_LAYER, new HorizontalLayerSpreadStrategy()),
+    LAYER(ModConstants.SHAPE_LAYER, new LayerSpreadStrategy()),
+    HOLE(ModConstants.SHAPE_HOLE, new HoleSpreadStrategy()),
+    ONE_BY_TWO(ModConstants.SHAPE_ONE_BY_TWO, new OneByTwoSpreadStrategy()),
+    ONE_BY_TWO_TUNNEL(ModConstants.SHAPE_ONE_BY_TWO_TUNNEL, new OneByTwoTunnelSpreadStrategy()),
+    THREE_BY_THREE(ModConstants.SHAPE_THREE_BY_THREE, new ThreeByThreeSpreadStrategy()),
+    THREE_BY_THREE_TUNNEL(ModConstants.SHAPE_THREE_BY_THREE_TUNNEL, new ThreeByThreeTunnelSpreadStrategy()),
     ;
 
-    private final int id;
+    @Getter
     private final String name;
 
-    Shape(int id, String name) {
-        this.id = id;
+    @Getter
+    private final ISpreadStrategy spreadStrategy;
+
+    Shape(String name, ISpreadStrategy spreadStrategy) {
         this.name = name;
+        this.spreadStrategy = spreadStrategy;
     }
 
     public Shape prev() {
@@ -52,19 +59,6 @@ public enum Shape {
             case ONE_BY_TWO_TUNNEL -> THREE_BY_THREE;
             case THREE_BY_THREE -> THREE_BY_THREE_TUNNEL;
             case NONE, THREE_BY_THREE_TUNNEL -> HORIZONTAL_LAYER;
-        };
-    }
-
-    public static Shape from(int i) {
-        return switch (i) {
-            case 0 -> HORIZONTAL_LAYER;
-            case 1 -> LAYER;
-            case 2 -> HOLE;
-            case 3 -> ONE_BY_TWO;
-            case 4 -> ONE_BY_TWO_TUNNEL;
-            case 5 -> THREE_BY_THREE;
-            case 6 -> THREE_BY_THREE_TUNNEL;
-            default -> NONE;
         };
     }
 }

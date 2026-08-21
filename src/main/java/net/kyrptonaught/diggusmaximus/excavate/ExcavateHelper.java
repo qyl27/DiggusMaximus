@@ -2,9 +2,9 @@ package net.kyrptonaught.diggusmaximus.excavate;
 
 import net.kyrptonaught.diggusmaximus.ModPlatformEvents;
 import net.kyrptonaught.diggusmaximus.config.ConfigHelper;
+import net.kyrptonaught.diggusmaximus.util.HolderHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
-import net.minecraft.core.Vec3i;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -45,7 +45,7 @@ public class ExcavateHelper {
         }
 
         var target = level.getBlockState(targetPos);
-        var targetHolder = target.getBlock().builtInRegistryHolder();
+        var targetHolder = HolderHelper.get(target.getBlock());
 
         if (isBlockDisallowed(targetHolder)) {
             return false;
@@ -63,11 +63,7 @@ public class ExcavateHelper {
             return false;
         }
 
-        if (!ModPlatformEvents.beforePlayerBreakBlock(level, player, target, targetPos)) {
-            return false;
-        }
-
-        return true;
+        return ModPlatformEvents.beforePlayerBreakBlock(level, player, target, targetPos);
     }
 
     private static boolean isBlockLoaded(Level level, BlockPos pos) {
@@ -121,7 +117,7 @@ public class ExcavateHelper {
         }
 
         for (var e : ConfigHelper.getConfig().common.customTools) {
-            if (e.is(stack.getItem().builtInRegistryHolder())) {
+            if (e.is(HolderHelper.get(stack.getItem()))) {
                 return true;
             }
         }
@@ -138,11 +134,11 @@ public class ExcavateHelper {
             return true;
         }
 
-        var hasSameId = hasSameBlockId(originalHolder, targetHolder);
+        var hasSameId = HolderHelper.is(originalHolder, targetHolder);
 
         if (hasSameId) {
             var shouldMatchState = ConfigHelper.getConfig().common.matchState.stream()
-                    .anyMatch(e -> e.is(originalHolder));
+                .anyMatch(e -> e.is(originalHolder));
             if (shouldMatchState) {
                 return hasSameState(original, target);
             } else {
@@ -151,18 +147,6 @@ public class ExcavateHelper {
         }
 
         return isInSameGroup(originalHolder, targetHolder);
-    }
-
-    /**
-     * Check if two {@link Block} have the same id. We assume blocks with same id should refer a same Block instance.
-     *
-     * @param original The original Block Holder
-     * @param target   The target Block Holder
-     * @return true for same
-     */
-    @SuppressWarnings("deprecation")
-    private static boolean hasSameBlockId(Holder<Block> original, Holder<Block> target) {
-        return original.is(target);
     }
 
     private static boolean isInSameGroup(Holder<Block> original, Holder<Block> target) {
@@ -191,8 +175,8 @@ public class ExcavateHelper {
 
     private static <T extends Comparable<T>> boolean hasSamePropertyValue(BlockState target, Property.Value<T> originalValue) {
         return target.getOptionalValue(originalValue.property())
-                .map(targetValue -> originalValue.value().compareTo(targetValue) == 0)
-                .orElse(false);
+            .map(targetValue -> originalValue.value().compareTo(targetValue) == 0)
+            .orElse(false);
     }
 
     // </editor-fold>
@@ -206,9 +190,5 @@ public class ExcavateHelper {
 
     public static boolean tryToExcavate(ServerPlayer player, BlockPos pos) {
         return player.gameMode.destroyBlock(pos);
-    }
-
-    public static boolean isValidOffset(Vec3i pos) {
-        return (Math.abs(pos.getX()) + Math.abs(pos.getY()) + Math.abs(pos.getZ())) != 0;
     }
 }
