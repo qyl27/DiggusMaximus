@@ -21,7 +21,7 @@ loom {
     accessWidenerPath = file('src/main/resources/diggusmaximus.accesswidener')
 
     runConfigs.configureEach {
-        ideConfigGenerated = false
+        generateRunConfig.set false
     }
 }
 
@@ -195,21 +195,21 @@ subprojects {
         runs {
             client {
                 client()
-                runDir 'run/client'
+                runDirectory.set project.file('run/client')
             }
 
             server {
                 server()
-                runDir 'run/server'
+                runDirectory.set project.file('run/server')
             }
 
             configureEach {
-                vmArg '-XX:+IgnoreUnrecognizedVMOptions'
-                vmArg '-XX:+AllowEnhancedClassRedefinition'
-                property 'file.encoding', 'UTF-8'
-                property 'stdout.encoding', 'UTF-8'
-                property 'stderr.encoding', 'UTF-8'
-                property 'stdin.encoding', 'UTF-8'
+                jvmArguments.add '-XX:+IgnoreUnrecognizedVMOptions'
+                jvmArguments.add '-XX:+AllowEnhancedClassRedefinition'
+                systemProperties.put 'file.encoding', 'UTF-8'
+                systemProperties.put 'stdout.encoding', 'UTF-8'
+                systemProperties.put 'stderr.encoding', 'UTF-8'
+                systemProperties.put 'stdin.encoding', 'UTF-8'
             }
         }
     }
