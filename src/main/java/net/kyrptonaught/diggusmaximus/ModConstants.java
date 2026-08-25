@@ -5,7 +5,6 @@ public class ModConstants {
 
     public static final String KEY_CATEGORY = "key.category.diggusmaximus.keys";
     public static final String KEY_EXCAVATE = "key.diggusmaximus.excavate";
-    public static final String KEY_SHAPED = "key.diggusmaximus.shaped_excavate";
     public static final String KEY_CYCLE_SHAPE = "key.diggusmaximus.cycle_shape";
 
     public static final String SHAPE_NONE = "diggusmaximus.shape.none";

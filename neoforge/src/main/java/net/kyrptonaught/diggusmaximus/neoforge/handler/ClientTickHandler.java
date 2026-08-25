@@ -19,7 +19,6 @@ public class ClientTickHandler {
     @SubscribeEvent
     public static void onRegisterKey(RegisterKeyMappingsEvent event) {
         event.register(DiggusMaximusClient.EXCAVATE);
-        event.register(DiggusMaximusClient.SHAPED);
         event.register(DiggusMaximusClient.CYCLE);
     }
 }

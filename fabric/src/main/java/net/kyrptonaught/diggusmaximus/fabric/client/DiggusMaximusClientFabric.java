@@ -11,7 +11,6 @@ public class DiggusMaximusClientFabric implements ClientModInitializer {
         ClientTickEvents.END_CLIENT_TICK.register(DiggusMaximusClient::onClientTick);
 
         KeyMappingHelper.registerKeyMapping(DiggusMaximusClient.EXCAVATE);
-        KeyMappingHelper.registerKeyMapping(DiggusMaximusClient.SHAPED);
         KeyMappingHelper.registerKeyMapping(DiggusMaximusClient.CYCLE);
     }
 }

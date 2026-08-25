@@ -21,5 +21,5 @@ public class ClientCategory implements ConfigData {
     @ConfigEntry.Gui.EnumHandler(
             option = ConfigEntry.Gui.EnumHandler.EnumDisplayOption.BUTTON
     )
-    public Shape selectedShape = Shape.LAYER;
+    public Shape selectedShape = Shape.NONE;
 }

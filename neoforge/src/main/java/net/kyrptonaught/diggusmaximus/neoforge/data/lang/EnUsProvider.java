@@ -15,7 +15,6 @@ public class EnUsProvider extends LanguageProvider {
     protected void addTranslations() {
         add(ModConstants.KEY_CATEGORY, "Diggus Maximus Reborn");
         add(ModConstants.KEY_EXCAVATE, "Excavate");
-        add(ModConstants.KEY_SHAPED, "Shape Excavate");
         add(ModConstants.KEY_CYCLE_SHAPE, "Cycle Shape");
 
         add(buildAutoConfigTitle(), "Diggus Maximus Options");
@@ -63,7 +62,7 @@ public class EnUsProvider extends LanguageProvider {
         add(buildAutoConfigKey("client", "stopAfterToolBroken"), "Stop After Tool Breaks");
         add(buildAutoConfigKeyTooltip("client", "stopAfterToolBroken"), "Prevent lost any drops (client setting overrides common setting)");
 
-        add(ModConstants.SHAPE_NONE, "None");
+        add(ModConstants.SHAPE_NONE, "No Shape");
         add(ModConstants.SHAPE_HORIZONTAL_LAYER, "Horizontal Layer");
         add(ModConstants.SHAPE_LAYER, "Layer");
         add(ModConstants.SHAPE_HOLE, "Hole");

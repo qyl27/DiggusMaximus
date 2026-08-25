@@ -15,7 +15,6 @@ public class ZhCnProvider extends LanguageProvider {
     protected void addTranslations() {
         add(ModConstants.KEY_CATEGORY, "连锁挖掘 §7(Diggus Maximus Reborn)");
         add(ModConstants.KEY_EXCAVATE, "激活连锁挖掘");
-        add(ModConstants.KEY_SHAPED, "形状连锁挖掘");
         add(ModConstants.KEY_CYCLE_SHAPE, "改变形状");
 
         add(buildAutoConfigTitle(), "连锁挖掘选项");
@@ -63,7 +62,7 @@ public class ZhCnProvider extends LanguageProvider {
         add(buildAutoConfigKey("client", "stopAfterToolBroken"), "在工具损坏后停止挖掘");
         add(buildAutoConfigKeyTooltip("client", "stopAfterToolBroken"), "防止挖坏方块（客户端偏好设置优先于通用设置）");
 
-        add(ModConstants.SHAPE_NONE, "无");
+        add(ModConstants.SHAPE_NONE, "无形状");
         add(ModConstants.SHAPE_HORIZONTAL_LAYER, "水平层");
         add(ModConstants.SHAPE_LAYER, "层");
         add(ModConstants.SHAPE_HOLE, "洞");

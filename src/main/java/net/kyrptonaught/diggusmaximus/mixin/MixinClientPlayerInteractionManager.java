@@ -38,26 +38,22 @@ public abstract class MixinClientPlayerInteractionManager {
             return;
         }
 
-        {
-            var pressed = config.client.invertActivation ^ DiggusMaximusClient.EXCAVATE.isDown();
-            if (pressed) {
-                var packet = new ExcavatePacket(pos, BuiltInRegistries.BLOCK.getKey(minecraft.level.getBlockState(pos).getBlock()), Shape.NONE, Direction.NORTH);
-                ModNetworking.sendExcavatePacket(packet);
-                return;
-            }
+        var pressed = config.client.invertActivation ^ DiggusMaximusClient.EXCAVATE.isDown();
+        if (!pressed) {
+            return;
         }
 
-        {
-            var pressed = config.client.invertActivation ^ DiggusMaximusClient.SHAPED.isDown();
-            if (pressed) {
-                var shape = config.client.selectedShape;
-                var result = minecraft.player.pick(10, 0, false);
-                if (result.getType() == HitResult.Type.BLOCK) {
-                    var facing = ((BlockHitResult) result).getDirection();
-                    var packet = new ExcavatePacket(pos, BuiltInRegistries.BLOCK.getKey(minecraft.level.getBlockState(pos).getBlock()), shape, facing);
-                    ModNetworking.sendExcavatePacket(packet);
-                }
+        var shape = config.client.selectedShape;
+        var hitFace = Direction.NORTH;
+        if (shape != Shape.NONE) {
+            var result = player.pick(10, 0, false);
+            if (result.getType() != HitResult.Type.BLOCK) {
+                return;
             }
+            hitFace = ((BlockHitResult) result).getDirection();
         }
+
+        var packet = new ExcavatePacket(pos, BuiltInRegistries.BLOCK.getKey(minecraft.level.getBlockState(pos).getBlock()), shape, hitFace);
+        ModNetworking.sendExcavatePacket(packet);
     }
 }
