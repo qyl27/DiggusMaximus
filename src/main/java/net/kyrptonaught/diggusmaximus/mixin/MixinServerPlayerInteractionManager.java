@@ -1,5 +1,7 @@
 package net.kyrptonaught.diggusmaximus.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.kyrptonaught.diggusmaximus.excavate.Excavate;
 import net.kyrptonaught.diggusmaximus.config.ConfigHelper;
 import net.kyrptonaught.diggusmaximus.excavate.Shape;
@@ -14,11 +16,9 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(ServerPlayerGameMode.class)
 public class MixinServerPlayerInteractionManager {
-
     @Shadow
     @Final
     protected ServerPlayer player;
@@ -26,11 +26,11 @@ public class MixinServerPlayerInteractionManager {
     @Shadow
     protected ServerLevel level;
 
-    @Redirect(method = "destroyAndAck", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerPlayerGameMode;destroyBlock(Lnet/minecraft/core/BlockPos;)Z"))
-    public boolean diggus$redirect$destroyAndAck$destroyBlock(ServerPlayerGameMode instance, BlockPos pos) {
+    @WrapOperation(method = "destroyAndAck", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerPlayerGameMode;destroyBlock(Lnet/minecraft/core/BlockPos;)Z"))
+    public boolean diggus$wrapOperation$destroyAndAck$destroyBlock(ServerPlayerGameMode instance, BlockPos pos, Operation<Boolean> original) {
         if (ConfigHelper.getConfig().common.sneakToExcavate) {
             Identifier blockId = BuiltInRegistries.BLOCK.getKey(level.getBlockState(pos).getBlock());
-            boolean result = instance.destroyBlock(pos);
+            boolean result = original.call(instance, pos);
             if (result) {
                 if (ConfigHelper.getConfig().common.sneakToExcavate && player.isShiftKeyDown()) {
                     if (pos.closerToCenterThan(player.position(), 10)) {
@@ -40,6 +40,6 @@ public class MixinServerPlayerInteractionManager {
             }
             return result;
         }
-        return instance.destroyBlock(pos);
+        return original.call(instance, pos);
     }
 }
