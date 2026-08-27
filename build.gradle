@@ -26,7 +26,7 @@ loom {
 }
 
 dependencies {
-    // In order to use the @Environment and @EnvironmentInterface annotations from fabric loader.
+    // In order to use the @Environment and @EnvironmentInterface annotations from Fabric Loader.
     implementation libs.fabric.loader
 
     implementation libs.cloth.config.common

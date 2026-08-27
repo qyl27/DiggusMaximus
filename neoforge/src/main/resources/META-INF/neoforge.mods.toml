@@ -12,7 +12,7 @@ credits = "kyrptonaught"
 description = '''
 Mine ores more better!
 '''
-logoFile = "assets/diggusmaximus/icon.png"
+iconFile = "assets/diggusmaximus/icon.png"
 
 [[dependencies.${mod_id}]]
 modId = "minecraft"
