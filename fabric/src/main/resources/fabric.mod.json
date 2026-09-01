@@ -24,7 +24,7 @@
       "net.kyrptonaught.diggusmaximus.fabric.DiggusMaximusFabric"
     ],
     "client": [
-      "net.kyrptonaught.diggusmaximus.fabric.client.DiggusMaximusClientFabric"
+      "net.kyrptonaught.diggusmaximus.fabric.DiggusMaximusClientFabric"
     ],
     "modmenu": [
       "net.kyrptonaught.diggusmaximus.fabric.integration.modmenu.ModMenuIntegration"

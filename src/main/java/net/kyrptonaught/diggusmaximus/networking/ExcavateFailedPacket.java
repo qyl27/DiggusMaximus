@@ -2,11 +2,11 @@ package net.kyrptonaught.diggusmaximus.networking;
 
 import lombok.Getter;
 import net.kyrptonaught.diggusmaximus.ModConstants;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.entity.player.Player;
 import org.jetbrains.annotations.NotNull;
 
 public record ExcavateFailedPacket(Reason reason) implements CustomPacketPayload {
@@ -43,7 +43,7 @@ public record ExcavateFailedPacket(Reason reason) implements CustomPacketPayload
         }
     }
 
-    public static void handleClient(LocalPlayer player, ExcavateFailedPacket packet) {
+    public static void handleClient(Player player, ExcavateFailedPacket packet) {
 
     }
 }

@@ -1,6 +1,6 @@
 package net.kyrptonaught.diggusmaximus.mixin;
 
-import net.kyrptonaught.diggusmaximus.ModNetworking;
+import net.kyrptonaught.diggusmaximus.ModClientNetworking;
 import net.kyrptonaught.diggusmaximus.client.DiggusMaximusClient;
 import net.kyrptonaught.diggusmaximus.excavate.Shape;
 import net.kyrptonaught.diggusmaximus.config.ConfigHelper;
@@ -21,7 +21,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(MultiPlayerGameMode.class)
 public abstract class MixinClientPlayerInteractionManager {
-
     @Shadow
     @Final
     private Minecraft minecraft;
@@ -54,6 +53,6 @@ public abstract class MixinClientPlayerInteractionManager {
         }
 
         var packet = new ExcavatePacket(pos, BuiltInRegistries.BLOCK.getKey(minecraft.level.getBlockState(pos).getBlock()), shape, hitFace);
-        ModNetworking.sendExcavatePacket(packet);
+        ModClientNetworking.sendExcavatePacket(packet);
     }
 }
